@@ -1,11 +1,17 @@
 <html>
   <head>
     <title>Authentication Page</title>
+    {% load static %}
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'authentication/authentication_styles.css'%}"
+    />
   </head>
 
   <body>
     <div id="content" , name="content">
-      <h1>Authentication's Base template</h1>
+      <h1 id="heading">Authentication's Base template</h1>
       {% block content %} {% endblock %}
     </div>
   </body>
