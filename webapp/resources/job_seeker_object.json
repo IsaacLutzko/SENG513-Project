@@ -1,0 +1,52 @@
+{
+  "job_seekers": [
+    {
+      "job_seeker_email": "ahad.hamirani@ucalgary.ca",
+      "password": "1234",
+      "name": { "first": "Ahad", "last": "Hamirani" },
+      "Profile Pic": "img_location",
+      "About Me": "My name is Ahad",
+      "Github": "link",
+      "Linkedin": "link",
+      "job_types": ["type 1", "type 2", "type 3"],
+      "Likes_job": ["job_id", "job_id", "job_id"],
+      "Unlikes_job": ["job_id", "job_id", "job_id"],
+      "Match": ["job_id", "job_id", "job_id"],
+      "work_experience": [
+        {
+          "job_seeker_email": "ahad.hamirani@ucalgary.ca",
+          "company": "google",
+          "job_title": "Junior-dev",
+          "job_type": "",
+          "start_date": "",
+          "end_date": "",
+          "description": ""
+        },
+        {
+          "job_seeker_email": "ahad.hamirani@ucalgary.ca",
+          "company": "apple",
+          "job_title": "",
+          "job_type": "",
+          "start_date": "",
+          "end_date": "",
+          "description": ""
+        }
+      ],
+      "skills": ["skill 1", "skill 2"],
+      "education": [
+        {
+          "Institute": "UofC",
+          "start_date": "date",
+          "end_date": "date",
+          "degree_type": ""
+        },
+        {
+          "Institute": "UofA",
+          "start_date": "date",
+          "end_date": "date",
+          "degree_type": ""
+        }
+      ]
+    }
+  ]
+}

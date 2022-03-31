@@ -1,0 +1,11 @@
+{
+  "hiring_manager": [
+    {
+      "hiring_manager_email": "example@gmail.com",
+      "password": "password",
+      "company_name": "name",
+      "company_logo": "path",
+      "posted_jobs": ["job_id", "job_id", "job_id"]
+    }
+  ]
+}

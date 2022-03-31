@@ -1,0 +1,25 @@
+{
+  "jobs": [
+    {
+      "job_id": "123",
+      "hiring_manager_email": "example@gmail.com",
+      "description": "this is a job",
+      "req_expirence": 4,
+      "job_title": "title",
+      "job_type": "type",
+      "start_date": "date",
+      "location": { "country": "", "city": "", "address": "" },
+      "skills": ["skill 1", "skill 2", "skill 3"],
+      "likes_job_seeker": [
+        "job_seeker_1_email",
+        "job_seeker_2_email",
+        "job_seeker_3_email"
+      ],
+      "unlikes_job_seeker": [
+        "job_seeker_1_email",
+        "job_seeker_2_email",
+        "job_seeker_3_email"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+App.vue
+
+Views:
+
+  RegisterView:
+    Components:
+    landing page, signup form, create account or company info pop, login page
+
+  JobseekerView:
+    Components:
+    Navbar, Explore page, Matches page, Profile page and edit profile
+
+  HiringmanagerView:
+    Components:
+    Navbar, Explore page, Matches page, Jobs page and add job page

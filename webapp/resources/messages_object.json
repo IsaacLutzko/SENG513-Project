@@ -1,0 +1,18 @@
+{
+  "matches": [
+    {
+      "job_id": "job_id",
+      "job_seeker_email": "job_seeker_email@gmail.com",
+      "messages": [
+        {
+          "message_id": "message_id",
+          "content": "",
+          "sender": "job_id",
+          "reciever": "job_seeker_email",
+          "date": "date",
+          "time": "timestamp"
+        }
+      ]
+    }
+  ]
+}
