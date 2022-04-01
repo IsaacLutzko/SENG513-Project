@@ -1,16 +1,16 @@
 <template>
   <div class="app">
-    <Jobseeker />
+    <Hiringmanager />
   </div>
 </template>
 
 <script>
-import Jobseeker from "./views/JobseekerView.vue";
+import Hiringmanager from "./views/HiringManagerView.vue";
 
 export default {
   name: "App",
   components: {
-    Jobseeker,
+    Hiringmanager,
   },
 };
 </script>
