@@ -1,7 +1,7 @@
 <template>
   <div class="page-container">
     <div class="content">
-      <div class="heading">Sign Up Form</div>
+      <div class="heading">Login Page</div>
       <div class="sub-heading">Please fill in all the fields below</div>
       <div class="input-box">
         <span class="details">Email</span>
@@ -18,51 +18,16 @@
       <div class="input-box">
         <span class="details">Password</span>
         <input
-          v-model="state.password.password"
+          v-model="state.password"
           class="text-area"
           type="password"
           placeholder="Enter your password"
         />
-        <span v-if="v$.password.password.$error">
-          {{ v$.password.password.$errors[0].$message }}
-        </span>
-      </div>
-      <div class="input-box">
-        <span class="details">Confirm Password</span>
-        <input
-          v-model="state.password.Confirm"
-          class="text-area"
-          type="password"
-          placeholder="Re-enter your password"
-        />
-        <span v-if="v$.password.Confirm.$error">
-          {{ v$.password.Confirm.$errors[0].$message }}
+        <span v-if="v$.password.$error">
+          {{ v$.password.$errors[0].$message }}
         </span>
       </div>
 
-      <div class="input-box">
-        <div class="details">User Type</div>
-        <select
-          v-model="state.user_type"
-          class="form-select dropdown-box"
-          aria-label="Default select example"
-        >
-          <option value="Jobseeker">Jobseeker</option>
-          <option value="HiringManager">HiringManager</option>
-        </select>
-        <span v-if="v$.user_type.$error">
-          {{ v$.user_type.$errors[0].$message }}
-        </span>
-      </div>
-
-      <!-- <div class="button input-box">
-          <input
-            @click="submitForm"
-            class="input-button"
-            type="submit"
-            value="Sign Up"
-          />
-        </div> -->
       <div class="button input-box">
         <button @click="submitForm" class="input-button">Sign Up</button>
       </div>
@@ -76,8 +41,6 @@ import { reactive, computed } from "vue";
 import {
   required,
   email,
-  minLength,
-  sameAs,
   // helpers,
 } from "@vuelidate/validators";
 
@@ -86,21 +49,13 @@ export default {
   setup() {
     const state = reactive({
       email: "",
-      password: {
-        password: "",
-        Confirm: "",
-      },
-      user_type: "",
+      password: "",
     });
 
     const rules = computed(() => {
       return {
         email: { required, email },
-        password: {
-          password: { minLength: minLength(6), required },
-          Confirm: { required, sameAs: sameAs(state.password.password) },
-        },
-        user_type: { required },
+        password: { required },
       };
     });
 
