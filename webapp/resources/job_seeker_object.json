@@ -8,7 +8,7 @@
       "About Me": "My name is Ahad",
       "Github": "link",
       "Linkedin": "link",
-      "job_types": ["type 1", "type 2", "type 3"],
+      "jobtypes": ["type 1", "type 2", "type 3"],
       "Likes_job": ["job_id", "job_id", "job_id"],
       "Unlikes_job": ["job_id", "job_id", "job_id"],
       "Match": ["job_id", "job_id", "job_id"],
