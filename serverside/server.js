@@ -73,17 +73,44 @@ io.on("connection", (socket) => {
     console.log("New user data recvd:");
 
     for (let i = 0; i < users.length; i++) {
-      if (i.email === JS_email) {
-        i.firstname = user.firstname;
-        console.log(user.firstname);
-        i.lastname = user.lastname;
-        console.log(user.lastname);
-        i.aboutyou = user.aboutyou;
-        console.log(user.aboutyou);
-        for (let j = 0; j < user.education.length; j++) {
-          i.education[j].push(user.education[j]);
-          console.log(i.education[j]);
+      // find the current user
+      if (users[i].email === JS_email) {
+        // set first name
+        users[i].firstname = user.firstname;
+        console.log(users[i].firstname);
+        // set last name
+        users[i].lastname = user.lastname;
+        console.log(users[i].lastname);
+        // set about you
+        users[i].aboutyou = user.aboutyou;
+        console.log(users[i].aboutyou);
+        // create image file
+        require("fs").writeFile(
+          "JS-profile-pics/" + JS_email + "-pic.png",
+          user.image,
+          "base64",
+          function (err) {
+            console.log(err);
+          }
+        );
+        // Job type
+        users[i].job_types = user.job_types;
+        console.log(users[i].job_types);
+        //skills
+        users[i].skills = user.skills;
+        console.log(users[i].skills);
+        // Relevant experience
+        users[i].work_experience = user.work_experience;
+        for (let j = 0; j < users[i].work_experience.length; j++) {
+          users[i].work_experience[j].job_seeker_email = JS_email;
         }
+        console.log(users[i].work_experience);
+        // Socials
+        users[i].socials = user.socials;
+        console.log(users[i].socials);
+        // education
+        users[i].education = user.education;
+        console.log(users[i].education);
       }
     }
   });

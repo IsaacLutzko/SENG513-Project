@@ -573,6 +573,7 @@ export default {
   data() {
     return {
       url: null,
+      image: null,
       socket: Websocket,
       firstname: "",
       lastname: "",
@@ -691,16 +692,18 @@ export default {
       }
     },
     sendUserData: function () {
-      // this.socket.emit("userData", {
-      //   firstname: this.state.firstname,
-      //   lastname: this.state.lastname,
-      //   aboutyou: this.state.aboutyou,
-      //   job_types: this.state.job_types,
-      //   skills: this.skills,
-      //   work_experience: this.work_experience,
-      //   socials: this.socials,
-      //   education: this.education,
-      // });
+      this.socket.emit("userData", {
+        image: this.image,
+        firstname: this.state.firstname,
+        lastname: this.state.lastname,
+        aboutyou: this.state.aboutyou,
+
+        job_types: this.state.job_types,
+        skills: this.skills,
+        work_experience: this.work_experience,
+        socials: this.socials,
+        education: this.education,
+      });
       console.log("user data sent to server");
     },
     // readThenSendFile: function (data) {
@@ -715,11 +718,11 @@ export default {
     // },
     uploadImage: function (event) {
       console.log(event.target.files[0]);
-      const image = event.target.files[0];
+      this.image = event.target.files[0];
       const reader = new FileReader();
-      this.url = URL.createObjectURL(image);
-      reader.readAsDataURL(image);
-      this.socket.emit("base64 file", image);
+      this.url = URL.createObjectURL(this.image);
+      reader.readAsDataURL(this.image);
+      // this.socket.emit("base64 file", image);
     },
   },
 };
