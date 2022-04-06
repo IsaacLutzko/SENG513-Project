@@ -1,6 +1,7 @@
 const app = require("express")();
 const http = require("http").Server(app);
 const io = require("socket.io")(http);
+const fs = require("fs");
 
 let users = [
   {
@@ -85,6 +86,19 @@ io.on("connection", (socket) => {
         }
       }
     }
+  });
+
+  socket.on("base64 file", function (msg) {
+    console.log("received base64 file from");
+    // socket.broadcast.emit('base64 image', //exclude sender
+    console.log(msg);
+    require("fs").writeFile("out.png", msg, "base64", function (err) {
+      console.log(err);
+    });
+    // fs.writeFile("test.png", , "binary", function (err) {
+    //   if (err) throw err;
+    //   console.log("File saved.");
+    // });
   });
 
   // Disconnect

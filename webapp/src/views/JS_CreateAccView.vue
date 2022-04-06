@@ -3,7 +3,14 @@
     <div class="container">
       <div class="row">
         <div class="col-lg-auto col-class names-col">
-          <img class="profile-pic" src="@/assets/user_profile_icon.png" />
+          <img v-if="url" :src="url" class="profile-pic" />
+          <img
+            v-else
+            class="profile-pic"
+            src="@/assets/user_profile_icon.png"
+          />
+
+          <input type="file" @change="uploadImage" multiple />
         </div>
         <div class="col-lg-auto col-class names-col">
           <div class="input-box">
@@ -33,7 +40,7 @@
             </span>
           </div>
         </div>
-        <div class="col-lg-7 col-class about-col">
+        <div class="col-lg-5 col-class about-col">
           <div class="input-box">
             <span class="details">About you</span>
             <input
@@ -565,6 +572,7 @@ import {
 export default {
   data() {
     return {
+      url: null,
       socket: Websocket,
       firstname: "",
       lastname: "",
@@ -683,17 +691,35 @@ export default {
       }
     },
     sendUserData: function () {
-      this.socket.emit("userData", {
-        firstname: this.state.firstname,
-        lastname: this.state.lastname,
-        aboutyou: this.state.aboutyou,
-        job_types: this.state.job_types,
-        skills: this.skills,
-        work_experience: this.work_experience,
-        socials: this.socials,
-        education: this.education,
-      });
+      // this.socket.emit("userData", {
+      //   firstname: this.state.firstname,
+      //   lastname: this.state.lastname,
+      //   aboutyou: this.state.aboutyou,
+      //   job_types: this.state.job_types,
+      //   skills: this.skills,
+      //   work_experience: this.work_experience,
+      //   socials: this.socials,
+      //   education: this.education,
+      // });
       console.log("user data sent to server");
+    },
+    // readThenSendFile: function (data) {
+    //   var reader = new FileReader();
+    //   reader.onload = function (evt) {
+    //     var msg = {};
+    //     msg.file = evt.target.result;
+    //     msg.fileName = data.name;
+    //     this.socket.emit("base64 file", msg);
+    //   };
+    //   reader.readAsDataURL(data);
+    // },
+    uploadImage: function (event) {
+      console.log(event.target.files[0]);
+      const image = event.target.files[0];
+      const reader = new FileReader();
+      this.url = URL.createObjectURL(image);
+      reader.readAsDataURL(image);
+      this.socket.emit("base64 file", image);
     },
   },
 };
