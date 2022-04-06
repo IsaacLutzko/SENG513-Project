@@ -71,6 +71,8 @@
 </template>
 
 <script>
+// import io, { Socket } from "socket.io-client";
+import Websocket from "../../services/webSocket";
 import useValidate from "@vuelidate/core";
 import { reactive, computed } from "vue";
 import {
@@ -83,6 +85,14 @@ import {
 
 // import $ from "jquery"
 export default {
+  data: function () {
+    return {
+      email: "",
+      password: "",
+      socket: Websocket,
+    };
+  },
+
   setup() {
     const state = reactive({
       email: "",
@@ -115,10 +125,35 @@ export default {
     submitForm() {
       this.v$.$validate();
       if (!this.v$.$error) {
-        alert("Form is submitted");
+        console.log("Form sent to server");
+        this.checkCredentials();
       } else {
         alert("Invalid inputs");
       }
+    },
+
+    checkCredentials: function () {
+      // Ask server for login confirmation
+      console.log();
+      console.log();
+      this.socket.emit("proposedlogin", {
+        email: this.state.email,
+        password: this.state.password.password,
+      });
+
+      // Listen for a response from the server
+      this.listen();
+    },
+    // All the listening functions
+    listen: function () {
+      this.socket.on("loginaccepted", () => {
+        console.log("credential accepted");
+        this.$router.push({ path: "/createaccount", replace: true });
+      });
+
+      this.socket.on("logindenied", () => {
+        console.log("credential denied");
+      });
     },
   },
 };
@@ -135,7 +170,7 @@ export default {
   margin: 0;
   padding: 0;
   width: 100%;
-  height: 100vh;
+  height: 90vh;
   display: flex;
   /* border: solid 5px red; */
   background-image: url(@/assets/login_image.png), url(@/assets/page_curve.svg);

@@ -9,34 +9,43 @@
           <div class="input-box">
             <span class="details">First Name</span>
             <input
-              v-model="firstname"
+              v-model="state.firstname"
               class="name-field text-area"
               type="text"
               placeholder="Enter your first name"
               required
             />
+            <span v-if="v$.firstname.$error">
+              {{ v$.firstname.$errors[0].$message }}
+            </span>
           </div>
           <div class="input-box">
             <span class="details">Last Name</span>
             <input
-              v-model="lastname"
+              v-model="state.lastname"
               class="name-field text-area"
               type="text"
               placeholder="Enter your last name"
               required
             />
+            <span v-if="v$.lastname.$error">
+              {{ v$.lastname.$errors[0].$message }}
+            </span>
           </div>
         </div>
         <div class="col-lg-7 col-class about-col">
           <div class="input-box">
             <span class="details">About you</span>
             <input
-              v-model="aboutyou"
+              v-model="state.aboutyou"
               class="about-you"
               type="text"
               placeholder="Give a brief description about you"
               required
             />
+            <span v-if="v$.aboutyou.$error">
+              {{ v$.aboutyou.$errors[0].$message }}
+            </span>
           </div>
         </div>
       </div>
@@ -50,7 +59,7 @@
           <div class="col-lg-4 type-col">
             <div class="dropdown-heading">Choice 1</div>
             <select
-              v-model="job_types[0]"
+              v-model="state.job_types[0]"
               class="form-select dropdown-box"
               aria-label="Default select example"
             >
@@ -81,11 +90,14 @@
               </option>
               <option value="Mobile Developer">Mobile Developer</option>
             </select>
+            <span v-if="v$.job_types[0].$error">
+              {{ v$.job_types[0].$errors[0].$message }}
+            </span>
           </div>
           <div class="col-lg-4 type-col">
             <div class="dropdown-heading">Choice 2</div>
             <select
-              v-model="job_types[1]"
+              v-model="state.job_types[1]"
               class="form-select dropdown-box"
               aria-label="Default select example"
             >
@@ -120,7 +132,7 @@
           <div class="col-lg-4 type-col">
             <div class="dropdown-heading">Choice 3</div>
             <select
-              v-model="job_types[2]"
+              v-model="state.job_types[2]"
               class="form-select dropdown-box"
               aria-label="Default select example"
             >
@@ -259,7 +271,7 @@
                         <input
                           type="checkbox"
                           value="TCP/IP"
-                          v-model="skills"
+                          v-model="state.skills"
                         />
                         <label>TCP/IP</label>
                       </div>
@@ -310,6 +322,9 @@
                 placeholder="Enter company name"
                 required
               />
+              <!-- <span v-if="v$.work.company.$error">
+                {{ v$.work.company.$errors[0].$message }}
+              </span> -->
             </div>
             <div class="input-box">
               <span class="details">Job Title</span>
@@ -320,6 +335,9 @@
                 placeholder="Enter your Job title"
                 required
               />
+              <!-- <span v-if="v$.work.job_title.$error">
+                {{ v$.work.job_title.$errors[0].$message }}
+              </span> -->
             </div>
           </div>
           <div class="col-lg-auto col-class names-col">
@@ -357,6 +375,9 @@
                 </option>
                 <option value="Mobile Developer">Mobile Developer</option>
               </select>
+              <!-- <span v-if="v$.work.job_type.$error">
+                {{ v$.work.job_type.$errors[0].$message }}
+              </span> -->
             </div>
 
             <div class="years-container">
@@ -373,6 +394,9 @@
                 <option value="5">5</option>
                 <option value="5">5+</option>
               </select>
+              <!-- <span v-if="v$.work.years.$error">
+                {{ v$.work.years.$errors[0].$message }}
+              </span> -->
             </div>
           </div>
           <div class="col-lg-6 col-md-12 col-class about-col">
@@ -385,6 +409,9 @@
                 placeholder="Give a brief description of your job"
                 required
               />
+              <!-- <span v-if="v$.work.description.$error">
+                {{ v$.work.description.$errors[0].$message }}
+              </span> -->
             </div>
           </div>
         </div>
@@ -414,6 +441,9 @@
               <option value="Github">Github</option>
               <option value="Linkedin">Linkedin</option>
             </select>
+            <!-- <span v-if="v$.social.platform.$error">
+              {{ v$.social.platform.$errors[0].$message }}
+            </span> -->
           </div>
           <div class="col-9 about-col">
             <div class="input-box">
@@ -425,6 +455,9 @@
                 placeholder="Link"
                 required
               />
+              <!-- <span v-if="v$.social.link.$error">
+                {{ v$.social.link.$errors[0].$message }}
+              </span> -->
             </div>
           </div>
         </div>
@@ -444,7 +477,7 @@
           </div>
         </div>
         <div class="row" v-for="item in education" :key="item">
-          <div class="col-3">
+          <div class="col-3 col-md-6 col-sm-12 col-xs-12">
             <div class="input-box">
               <span class="details">Education Type</span>
               <input
@@ -454,9 +487,12 @@
                 placeholder="Ex: Bachelor of Science"
                 required
               />
+              <!-- <span v-if="v$.item.degree_type.$error">
+                {{ v$.item.degree_type.$errors[0].$message }}
+              </span> -->
             </div>
           </div>
-          <div class="col-3">
+          <div class="col-3 col-md-6 col-sm-12 col-xs-12">
             <div class="input-box">
               <span class="details">Institution</span>
               <input
@@ -466,9 +502,12 @@
                 placeholder="Name of Institution"
                 required
               />
+              <!-- <span v-if="v$.item.institute.$error">
+                {{ v$.item.institute.$errors[0].$message }}
+              </span> -->
             </div>
           </div>
-          <div class="col-3">
+          <div class="col-3 col-md-6 col-sm-12 col-xs-12">
             <div class="input-box">
               <span class="details">Start date</span>
               <input
@@ -477,9 +516,12 @@
                 type="date"
                 required
               />
+              <!-- <span v-if="v$.item.start_date.$error">
+                {{ v$.item.start_date.$errors[0].$message }}
+              </span> -->
             </div>
           </div>
-          <div class="col-3">
+          <div class="col-3 col-md-6 col-sm-12 col-xs-12">
             <div class="input-box">
               <span class="details">End date</span>
               <input
@@ -488,6 +530,9 @@
                 type="date"
                 required
               />
+              <!-- <span v-if="v$.item.end_date.$error">
+                {{ v$.item.end_date.$errors[0].$message }}
+              </span> -->
             </div>
           </div>
         </div>
@@ -495,7 +540,7 @@
       </div>
     </div>
     <div class="button input-box">
-      <input class="input-button" type="submit" value="Finish" />
+      <button class="input-button" @click="submitForm">Finish</button>
     </div>
     <!-- <p>Saved things</p>
     <p>first name: {{ firstname }}</p>
@@ -509,13 +554,22 @@
 </template>
 
 <script>
+import Websocket from "../../services/webSocket";
+import useValidate from "@vuelidate/core";
+import { reactive, computed } from "vue";
+import {
+  required,
+  // helpers,
+} from "@vuelidate/validators";
+
 export default {
   data() {
     return {
-      firstname: "Ahad",
+      socket: Websocket,
+      firstname: "",
       lastname: "",
       aboutyou: "",
-      job_types: ["UX designer"],
+      job_types: [],
       skills: [],
       work_experience: [
         {
@@ -543,6 +597,57 @@ export default {
       ],
     };
   },
+
+  setup() {
+    const state = reactive({
+      firstname: "",
+      lastname: "",
+      aboutyou: "",
+      job_types: [],
+      skills: [],
+      work_experience: [
+        {
+          job_seeker_email: "",
+          company: "",
+          job_title: "",
+          job_type: "",
+          years: "",
+          description: "",
+        },
+      ],
+      socials: [
+        {
+          platform: "",
+          link: "",
+        },
+      ],
+      education: [
+        {
+          institute: "",
+          start_date: "",
+          end_date: "",
+          degree_type: "",
+        },
+      ],
+    });
+
+    const rules = computed(() => {
+      return {
+        firstname: { required },
+        lastname: { required },
+        aboutyou: { required },
+        job_types: [{ required }],
+      };
+    });
+
+    const v$ = useValidate(rules, state);
+
+    return {
+      state,
+      v$,
+    };
+  },
+
   methods: {
     addJob: function () {
       this.work_experience.push({
@@ -567,6 +672,28 @@ export default {
         end_date: "",
         degree_type: "",
       });
+    },
+    submitForm() {
+      this.v$.$validate();
+      if (!this.v$.$error) {
+        alert("Form filled correctly");
+        this.sendUserData();
+      } else {
+        alert("Invalid inputs");
+      }
+    },
+    sendUserData: function () {
+      this.socket.emit("userData", {
+        firstname: this.state.firstname,
+        lastname: this.state.lastname,
+        aboutyou: this.state.aboutyou,
+        job_types: this.state.job_types,
+        skills: this.skills,
+        work_experience: this.work_experience,
+        socials: this.socials,
+        education: this.education,
+      });
+      console.log("user data sent to server");
     },
   },
 };
@@ -624,10 +751,9 @@ export default {
 
 .page-container {
   margin: 0;
-  margin-top: 50px;
   padding: 0;
   width: 100%;
-  height: 100vh;
+  height: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
