@@ -8,52 +8,19 @@
                     </div>
 
                     <div class="postings-list-cont">
-
-                        <ul class="postings-list">
-                            <li @click="activePosting(1)" :class="{ activePost : active_item == 1 }" style="list-style:none;">
+                        <ul v-for="(posting,index) in postings" :key="index" class="postings-list">
+                            <li @click="activePosting(index, posting.jobtitle)" :class="{ activePost : active_item == index }" style="list-style:none;">
                                 <div class="col-auto d-flex justify-content-left">
                                     <button style="border: 0; background: transparent;">
-                                        <h5 class="posting-list-title" style="text-align:left; font-weight: bold; font-size: 1.9vw; font-family: Montserrat, sans-serif; margin-top: 7%; margin-bottom: 7%;">Backend Developer</h5>
+                                        <h5 class="posting-list-title" style="text-align:left; font-weight: bold; font-size: 1.9vw; font-family: Montserrat, sans-serif; margin-top: 7%; margin-bottom: 7%;">
+                                            {{ posting.jobtitle }} </h5>
                                     </button>
                                     <img src="@/assets/right-arrow_large.png" alt="" id="postings-arrow" style="width=30%">
                                 </div>
                                 <div class="col-auto d-flex justify-content-left">
-                                    <p class="posting-job-type">Internship</p>
+                                    <p class="posting-job-type">{{posting.jobtype}}</p>
                                 </div>
                             </li>
-                            <li @click="activePosting(2)" :class="{ activePost : active_item == 2 }" style="list-style:none;">
-                                <div class="col-auto d-flex justify-content-left">
-                                    <button style="border: 0; background: transparent;">
-                                        <h5 class="posting-list-title" style="text-align:left; font-weight: bold; font-size: 1.9vw; font-family: Montserrat, sans-serif; margin-top: 7%; margin-bottom: 7%;">DevOps Specialist</h5>
-                                    </button>
-                                    <img src="@/assets/right-arrow_large.png" alt="" id="postings-arrow" style="width=30%">
-                                </div>
-                                <div class="col-auto d-flex justify-content-left">
-                                    <p class="posting-job-type">Full-Time Job</p>
-                                </div>
-                            </li>
-                            <li @click="activePosting(3)" :class="{ activePost : active_item == 3 }" style="list-style:none;">
-                                <div class="col-auto d-flex justify-content-left">
-                                    <button style="border: 0; background: transparent;">
-                                        <h5 class="posting-list-title" style="text-align:left; font-weight: bold; font-size: 1.9vw; font-family: Montserrat, sans-serif; margin-top: 7%; margin-bottom: 7%;">Senior Test Developer</h5>
-                                    </button>
-                                    <img src="@/assets/right-arrow_large.png" alt="" id="postings-arrow" style="width=30%">
-                                </div>
-                                <div class="col-auto d-flex justify-content-left">
-                                    <p class="posting-job-type">New Grad Job</p>
-                                </div>
-                            </li>
-                            <li @click="activePosting(4)" :class="{ activePost : active_item == 4 }" style="list-style:none;">
-                                <div class="col-auto d-flex justify-content-left">
-                                    <button style="border: 0; background: transparent;">
-                                        <h5 class="posting-list-title" style="text-align:left; font-weight: bold; font-size: 1.9vw; font-family: Montserrat, sans-serif; margin-top: 7%; margin-bottom: 7%;">Junior Software Engineer</h5>
-                                    </button>
-                                    <img src="@/assets/right-arrow_large.png" alt="" id="postings-arrow" style="width=30%">
-                                </div>
-                                <div class="col-auto d-flex justify-content-left">
-                                    <p class="posting-job-type">Job</p>
-                                </div>
-                            </li>  
                         </ul>
                     </div>
                 </div>
@@ -70,7 +37,7 @@
                             </button>
                         </div>
                         <div class="job-title-container col-10">
-                            <div v-if="dropItDown" class="job-title">Full-Stack Developer</div>
+                            <div v-if="dropItDown" class="job-title">{{activeJob}}</div>
                             <div v-else class="job-title">Job Postings</div>
                         </div>
                         <div class="col-1"></div>
@@ -78,99 +45,98 @@
                 </div>
 
                 <div v-if="dropItDown" class="card-container">
-                    <div class="row d-flex justify-content-center" id="card-img">
-                        <div class="col-sm-auto">
-                            <div class="profile-image d-flex justify-content-center">
-                                <img class="logo" src="@/assets/user_profile_icon.png" />
-                            </div>
-                            <div class="profile-name">Isaac Lutzko</div>
-                        </div>
-                    </div>
-                    <div class="row d-flex justify-content-center" id="socials">
-                        <div class="col-sm-5 d-flex justify-content-center">
-                            <img class="social-logo-link" src="@/assets/LinkedInLogo.png"/>
-                            <h5 class="social-name-link">  Isaac-Lutzko</h5> 
-                        </div>
-                        <div class="col-sm-5 d-flex justify-content-center">
-                            <img class="social-logo-git" src="@/assets/GitHubLogo.png" />
-                            <h5 class="social-name-git">  Isaac-Lutzko</h5> 
-                        </div>
-                    </div>
+                    <div v-for="dynoCard in dynoCards" :key="dynoCard">
 
-                    <div class="row d-flex justify-content-center" id="about-me">
-                        <div class="col-sm-auto">
-                            <div class="about-me-header">
-                                <h5 class="header-about">About Me</h5>
-                            </div>
-                            <div class="about-me-desc">
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras imperdiet sagittis orci, ac dignissim nulla tempor eget. Proin varius, diam non pharetra feugiat, libero odio fermentum lacus, eu congue risus odio id elit. Maecenas imperdiet tempor sapien, eu imperdiet dolor. Phasellus turpis sapien, dapibus vehicula ante ac, eleifend porttitor sapien. Maecenas consectetur et nunc non elementum. Donec pharetra nisl pulvinar dolor tincidunt, rhoncus ornare lorem malesuada.
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row d-flex justify-content-center" id="work-experiences">
-                        <div class="col-sm-auto">
-                            <div class="experience-header">
-                                <h5 class="experience-head">Experience</h5>
-                            </div>
-                            <!-- first work experience example -->
-                            <div class="work-example1">
-                                <div class="work-header1">
-                                    <h5 class="work-head1">Test Summer Student</h5>
+                        <div class="row d-flex justify-content-center" id="card-img">
+                            <div class="col-sm-auto">
+                                <div class="profile-image d-flex justify-content-center">
+                                    <img class="logo" src="@/assets/user_profile_icon.png" /> <!-- How to make image dynamic? -->
                                 </div>
-                                <div class="work-info">SMART Technologies - Summer Student - 8 months</div>
-                                <div class="work-exp-desc">
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras imperdiet sagittis orci, ac dignissim nulla tempor eget. Proin varius, diam non pharetra feugiat, libero odio fermentum lacus, eu congue risus odio id elit. Maecenas imperdiet tempor sapien, eu imperdiet dolor. Phasellus turpis sapien, dapibus vehicula ante ac, eleifend porttitor sapien. Maecenas consectetur et nunc non elementum. Donec pharetra nisl pulvinar dolor tincidunt, rhoncus ornare lorem malesuada.
-                                </div>
-                            </div>
-
-                            <div class="work-example1">
-                                <div class="work-header1">
-                                    <h5 class="work-head1">Test Summer Student</h5>
-                                </div>
-                                <div class="work-info">SMART Technologies - Summer Student - 8 months</div>
-                                <div class="work-exp-desc">
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras imperdiet sagittis orci, ac dignissim nulla tempor eget. Proin varius, diam non pharetra feugiat, libero odio fermentum lacus, eu congue risus odio id elit. Maecenas imperdiet tempor sapien, eu imperdiet dolor. Phasellus turpis sapien, dapibus vehicula ante ac, eleifend porttitor sapien. Maecenas consectetur et nunc non elementum. Donec pharetra nisl pulvinar dolor tincidunt, rhoncus ornare lorem malesuada.
-                                </div>
-                            </div>
-                            
-                        </div>
-                    </div>
-
-                    <div class="row d-flex justify-content-center" id="skills">
-                        <div class="col-sm-auto">
-                            <div class="skills-header">
-                                <h5 class="skills-head">Skills</h5>
-                            </div>
-                            <div class="skill-list">
-                                <label>C++</label>
-                                <label>SQL</label>
-                                <label>Git</label>
-                                <label>Python</label>
-                                <label>JavaScript</label>
+                                <div class="profile-name">{{dynoCard.name}}</div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="row d-flex justify-content-center" id="education-top">
-                        <div class="col-sm-auto">
-                            <div class="edu-header">
-                                <h5 class="edu-head">Education</h5>
+
+
+                        <!-- <div class="row d-flex justify-content-center" id="socials">
+
+                        </div> -->
+
+                        <div v-for="social in socials" :key="social" class="row d-flex justify-content-center" id="socials">
+                            <div v-if="social.linked != ''" class="col-sm-5 d-flex justify-content-center">
+                                <img class="social-logo-link" src="@/assets/LinkedInLogo.png"/>
+                                <h5 class="social-name-link">{{social.linked}}</h5> 
+                            </div>
+                            <div v-else class="col-sm-5 d-flex justify-content-center"> 
+                            </div>
+                            <div v-if="!social || !social.length" class="col-sm-5 d-flex justify-content-center">
+                                <img class="social-logo-git" src="@/assets/GitHubLogo.png" />
+                                <h5 class="social-name-git">{{social.git}}</h5> 
+                            </div>
+                            <div v-else class="col-sm-5 d-flex justify-content-center"> 
                             </div>
                         </div>
-                    </div>
 
-                    <div class="row d-flex justify-content-start" id="education-info">
-                        <div class="col-sm-auto">
-                            <div class="edu-ex1">
-                                <div class="edu-head1">
-                                    <h5 class="edu-head-deg">Bachelor of Science in Computer Science</h5> 
+
+
+
+                        <div class="row d-flex justify-content-center" id="about-me">
+                            <div class="col-sm-auto">
+                                <div class="about-me-header">
+                                    <h5 class="header-about">About Me</h5>
                                 </div>
-                                <div class="edu-info">2017-2023</div>
+                                <div class="about-me-desc">{{dynoCard.aboutMe}}</div>
+                            </div>
+                        </div>
+
+                        <div class="row d-flex justify-content-center" id="work-experiences">
+                                <div class="experience-header">
+                                    <h5 class="experience-head">Experience</h5>
+                                </div>
+                            <div v-for="workExp in workExps" :key="workExp" class="col-sm-auto">
+                                <!-- first work experience example -->
+                                <div class="work-example1">
+                                    <div class="work-header1">
+                                        <h5 class="work-head1">{{workExp.jobTitle}}</h5>
+                                    </div>
+                                    <div class="work-info">{{workExp.jobInfo}}</div>
+                                    <div class="work-exp-desc"> {{workExp.jobDesc}} </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row d-flex justify-content-center" id="skills">
+                                <div class="skills-header">
+                                    <h5 class="skills-head">Skills</h5>
+                                </div>
+                            <div v-for="skill in skills" :key="skill" class="col-sm-auto">
+                                <div class="skill-list">
+                                    <label>{{skill.name}}</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row d-flex justify-content-center" id="education-top">
+                            <div class="col-sm-auto">
+                                <div class="edu-header">
+                                    <h5 class="edu-head">Education</h5>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row d-flex justify-content-start" id="education-info">
+                            <div v-for="education in educations" :key="education" class="col-12">
+                                <div class="edu-ex1">
+                                    <div class="edu-head1">
+                                        <h5 class="edu-head-deg">{{education.degree}}</h5> 
+                                    </div>
+                                    <div class="edu-info">{{education.years}}</div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
 
                 <div v-else class="open-postings-dropdown d-flex justify-content-center" style="padding: 10px; height: 85%; background: white; display: flex;">
                     <div class="row d-flex justify-content-center" id="explore-postings-header" style="overflow-y: scroll; overflow-x:hidden; padding: 10px; border: 2.5px solid black; border-radius: 15px; width:70%; height: 85%; background: white; display: flex; margin-top: 5%">
@@ -178,41 +144,17 @@
                             <div class="postings-header">
                                 <h4 class="postings-head" style=" text-align: center; font-weight: bold; font-size: 2.5vw; font-family: Montserrat, sans-serif; padding-top: 5%;padding-bottom: 7%;"></h4>
                             </div>
-
                             <div class="postings-list-cont">
-                                <ul class="postings-list">
-                                    <li @click="activePosting(1)" :class="{ activePost : active_item == 1 }" style="list-style:none;">
+                                <ul v-for="(posting,index) in postings" :key="index" class="postings-list">
+                                    <li @click="activePosting(index,posting.jobtitle)" :class="{ activePost : active_item == index }" style="list-style:none;">
                                         <div class="col-auto d-flex justify-content-left">
                                             <button style="border: 0; background: transparent;">
-                                                <h5 class="posting-list-title" style="text-align:left; font-weight: bold; font-size: 100%; font-family: Montserrat, sans-serif; margin-top: 7%; margin-bottom: 7%;">Backend Developer</h5>
+                                                <h5 class="posting-list-title" style="text-align:left; font-weight: bold; font-size: 100%; font-family: Montserrat, sans-serif; margin-top: 7%; margin-bottom: 7%;">
+                                                    {{posting.jobtitle}}</h5>
                                             </button>
                                             <img src="@/assets/right-arrow_large.png" alt="" id="postings-arrow">
                                         </div>
                                     </li>
-                                    <li @click="activePosting(2)" :class="{ activePost : active_item == 2 }" style="list-style:none;">
-                                        <div class="col-auto d-flex justify-content-left">
-                                            <button style="border: 0; background: transparent;">
-                                                <h5 class="posting-list-title" style="text-align:left; font-weight: bold; font-size: 100%; font-family: Montserrat, sans-serif; margin-top: 7%; margin-bottom: 7%;">DevOps Specialist</h5>
-                                            </button>
-                                            <img src="@/assets/right-arrow_large.png" alt="" id="postings-arrow">
-                                        </div>
-                                    </li>
-                                    <li @click="activePosting(3)" :class="{ activePost : active_item == 3 }" style="list-style:none;">
-                                        <div  class="col-auto d-flex justify-content-left">
-                                            <button style="border: 0; background: transparent;">
-                                                <h5 class="posting-list-title" style="text-align:left; font-weight: bold; font-size: 100%; font-family: Montserrat, sans-serif; margin-top: 7%; margin-bottom: 7%;">Senior Test Developer</h5>
-                                            </button>
-                                            <img src="@/assets/right-arrow_large.png" alt="" id="postings-arrow">
-                                        </div>
-                                    </li>
-                                    <li @click="activePosting(4)" :class="{ activePost : active_item == 4 }" style="list-style:none;">
-                                        <div class="col-auto d-flex justify-content-left">
-                                            <button style="border: 0; background: transparent;">
-                                                <h5 class="posting-list-title" style="text-align:left; font-weight: bold; font-size: 100%; font-family: Montserrat, sans-serif; margin-top: 7%; margin-bottom: 7%;">Junior Software Engineer</h5>
-                                            </button>
-                                            <img src="@/assets/right-arrow_large.png" alt="" id="postings-arrow">
-                                        </div>
-                                    </li>   
                                 </ul>
                             </div>
                         </div>
@@ -241,12 +183,71 @@ export default {
         return {
             dropItDown: true,
             active_item:0,
+            postings:
+            [
+                {jobtitle: "Backend Dev", jobtype: "Internship"},
+                {jobtitle: "Full Stack Dev", jobtype: "Full Time Job"},
+                {jobtitle: "DevOps Specialist", jobtype: "New Grad Job"},
+                {jobtitle: "Software Engineer", jobtype: "Internship"},
+            ],
+            activeJob: "",
+            dynoCards:
+            [
+                {
+                    name: "Isaac Lutzko",
+                    aboutMe: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras imperdiet sagittis orci, ac dignissim nulla tempor eget. Proin varius, diam non pharetra feugiat, libero odio fermentum lacus, eu congue risus odio id elit. Maecenas imperdiet tempor sapien, eu imperdiet dolor. Phasellus turpis sapien, dapibus vehicula ante ac, eleifend porttitor sapien. Maecenas consectetur et nunc non elementum. Donec pharetra nisl pulvinar dolor tincidunt, rhoncus ornare lorem malesuada.",
+                }
+            ],
+            socials: 
+            [
+                {
+                    linked: "",
+                    git: "IsaacLutzko"
+                }
+            ],
+            // linkedInValid: true,
+            // gitValid: (true),
+            workExps:
+            [
+                {
+                    jobTitle: "Test Summer Student",
+                    jobInfo: "SMART Technologies - Summer Student - 8 months",
+                    jobDesc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras imperdiet sagittis orci, ac dignissim nulla tempor eget. Proin varius, diam non pharetra feugiat, libero odio fermentum lacus, eu congue risus odio id elit. Maecenas imperdiet tempor sapien, eu imperdiet dolor. Phasellus turpis sapien, dapibus vehicula ante ac, eleifend porttitor sapien. Maecenas consectetur et nunc non elementum. Donec pharetra nisl pulvinar dolor tincidunt, rhoncus ornare lorem malesuada.",
+                },
+                {
+                    jobTitle: "Test Summer Student",
+                    jobInfo: "SMART Technologies - Summer Student - 8 months",
+                    jobDesc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras imperdiet sagittis orci, ac dignissim nulla tempor eget. Proin varius, diam non pharetra feugiat, libero odio fermentum lacus, eu congue risus odio id elit. Maecenas imperdiet tempor sapien, eu imperdiet dolor. Phasellus turpis sapien, dapibus vehicula ante ac, eleifend porttitor sapien. Maecenas consectetur et nunc non elementum. Donec pharetra nisl pulvinar dolor tincidunt, rhoncus ornare lorem malesuada.",
+                }
+            ],
+            skills:
+            [
+                {   name: "C++", },
+                {   name: "JavaScript" },
+                {   name: "Git" },
+                {   name: "SQL" },
+                {   name: "Python" }
+            ],
+            educations:
+            [
+                {
+                    degree: "BSc in Computer Science at U of C",
+                    years: "2017 - 2023"
+                },
+                {
+                    degree: "BComm in Business at U of C",
+                    years: "2017 - 2023"
+                }
+            ]
+
         }
     },
     methods: {
-        activePosting:function(element){
+        activePosting:function(element, jobVar){
             this.active_item = element;
-        }
+            this.activeJob = jobVar;
+        },
+
     }
 };
 </script>
