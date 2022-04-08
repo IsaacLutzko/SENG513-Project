@@ -1,83 +1,83 @@
 <template>
     <div class="row page-container">
-        <div class="desktop-postings-cont col-lg-3">
-            <div class="row d-flex justify-content-center" id="explore-postings-header">
+        <div v-if="dropItDown" class="desktop-postings-cont col-lg-3">
+            <div class="row d-flex justify-content-center" id="explore-postings-header" style="overflow-y: scroll; overflow-x:hidden;">
                 <div class="col-sm-auto">
                     <div class="postings-header">
                         <h4 class="postings-head">Your Postings</h4>
                     </div>
 
                     <div class="postings-list-cont">
-                        <div class="row d-flex justify-content-left">
-                            <div class="col-sm-10">
-                                <button><h5 class="posting-list-title">Backend Developer</h5></button>
-                            </div>
-                            <div class="col-sm-2">
-                                
-                            </div>
-                        </div>
-                        <div class="row d-flex justify-content-center">
-                            <div class="col-sm-10">
-                                <h5 class="posting-list-title">DevOps Specialist</h5>
-                            </div>
-                            <div class="col-sm-2">
 
-                            </div>
-                        </div>
-                        <div class="row d-flex justify-content-center" id="posting-selected">
-                            <div class="col-sm-10">
-                                <h5 class="posting-list-title">Senior Test Developer</h5>
-                            </div>
-                            <div class="col-sm-2 d-flex justify-content-center">
-                                <img src="@/assets/right-arrow_large.png" alt="" id="postings-arrow">
-                            </div>
-                        </div>
-                        <div class="row d-flex justify-content-center">
-                            <div class="col-sm-10">
-                                <h5 class="posting-list-title">Junior Software Engineer</h5>
-                            </div>
-                            <div class="col-sm-2">
-
-                            </div>
-                        </div>
-                        
-                        <!-- <ul class="postings-list">
-                            <li class="posting-list-item"><h5 class="posting-list-title">Backend Developer</h5></li>
-                            <li class="posting-list-item"><h5 class="posting-list-title">DevOps Specialist</h5></li>
-                            <li class="posting-list-item"><h5 class="posting-list-title">Senior Test Developer</h5></li>
-                            <li class="posting-list-item"><h5 class="posting-list-title">Junior Software Engineer</h5></li>  
-                        </ul> -->
+                        <ul class="postings-list">
+                            <li @click="activePosting(1)" :class="{ activePost : active_item == 1 }" style="list-style:none;">
+                                <div class="col-auto d-flex justify-content-left">
+                                    <button style="border: 0; background: transparent;">
+                                        <h5 class="posting-list-title" style="text-align:left; font-weight: bold; font-size: 1.9vw; font-family: Montserrat, sans-serif; margin-top: 7%; margin-bottom: 7%;">Backend Developer</h5>
+                                    </button>
+                                    <img src="@/assets/right-arrow_large.png" alt="" id="postings-arrow" style="width=30%">
+                                </div>
+                                <div class="col-auto d-flex justify-content-left">
+                                    <p class="posting-job-type">Internship</p>
+                                </div>
+                            </li>
+                            <li @click="activePosting(2)" :class="{ activePost : active_item == 2 }" style="list-style:none;">
+                                <div class="col-auto d-flex justify-content-left">
+                                    <button style="border: 0; background: transparent;">
+                                        <h5 class="posting-list-title" style="text-align:left; font-weight: bold; font-size: 1.9vw; font-family: Montserrat, sans-serif; margin-top: 7%; margin-bottom: 7%;">DevOps Specialist</h5>
+                                    </button>
+                                    <img src="@/assets/right-arrow_large.png" alt="" id="postings-arrow" style="width=30%">
+                                </div>
+                                <div class="col-auto d-flex justify-content-left">
+                                    <p class="posting-job-type">Full-Time Job</p>
+                                </div>
+                            </li>
+                            <li @click="activePosting(3)" :class="{ activePost : active_item == 3 }" style="list-style:none;">
+                                <div class="col-auto d-flex justify-content-left">
+                                    <button style="border: 0; background: transparent;">
+                                        <h5 class="posting-list-title" style="text-align:left; font-weight: bold; font-size: 1.9vw; font-family: Montserrat, sans-serif; margin-top: 7%; margin-bottom: 7%;">Senior Test Developer</h5>
+                                    </button>
+                                    <img src="@/assets/right-arrow_large.png" alt="" id="postings-arrow" style="width=30%">
+                                </div>
+                                <div class="col-auto d-flex justify-content-left">
+                                    <p class="posting-job-type">New Grad Job</p>
+                                </div>
+                            </li>
+                            <li @click="activePosting(4)" :class="{ activePost : active_item == 4 }" style="list-style:none;">
+                                <div class="col-auto d-flex justify-content-left">
+                                    <button style="border: 0; background: transparent;">
+                                        <h5 class="posting-list-title" style="text-align:left; font-weight: bold; font-size: 1.9vw; font-family: Montserrat, sans-serif; margin-top: 7%; margin-bottom: 7%;">Junior Software Engineer</h5>
+                                    </button>
+                                    <img src="@/assets/right-arrow_large.png" alt="" id="postings-arrow" style="width=30%">
+                                </div>
+                                <div class="col-auto d-flex justify-content-left">
+                                    <p class="posting-job-type">Job</p>
+                                </div>
+                            </li>  
+                        </ul>
                     </div>
                 </div>
             </div>
         </div>
-
+        
         <div class="container col-lg-9">
             <div class="content-container">
-            <!-- <div class="row job-title-container"> -->
-
                 <div class="sticky-top explore-postings-container">
                     <div class="row" id="mobile-postings-row"> <!-- hide after desktop breakpoint -->
                         <div class="back-arrow-container col-1 d-flex justify-content-center">
-                            <button class="back-arr-button"><img class="logo" src="@/assets/left-arrow.png" /></button>
+                            <button @click="dropItDown = !dropItDown" class="back-arr-button">
+                                <img class="logo" src="@/assets/left-arrow.png" />
+                            </button>
                         </div>
                         <div class="job-title-container col-10">
-                            <div class="job-title">Full-Stack Developer</div>
+                            <div v-if="dropItDown" class="job-title">Full-Stack Developer</div>
+                            <div v-else class="job-title">Job Postings</div>
                         </div>
                         <div class="col-1"></div>
                     </div>
-
-                    <!-- hide before desktop breakpoint -->
-                    <!-- <div class="row d-flex justify-content-center" id="desktop-postings-row"> 
-                    </div> -->
-                        
-
                 </div>
-                <!-- </div> -->
 
-                
-                <div class="card-container">
-
+                <div v-if="dropItDown" class="card-container">
                     <div class="row d-flex justify-content-center" id="card-img">
                         <div class="col-sm-auto">
                             <div class="profile-image d-flex justify-content-center">
@@ -170,63 +170,89 @@
                             </div>
                         </div>
                     </div>
-
-
-                    
-
                 </div>
 
-                
-            
+                <div v-else class="open-postings-dropdown d-flex justify-content-center" style="padding: 10px; height: 85%; background: white; display: flex;">
+                    <div class="row d-flex justify-content-center" id="explore-postings-header" style="overflow-y: scroll; overflow-x:hidden; padding: 10px; border: 2.5px solid black; border-radius: 15px; width:70%; height: 85%; background: white; display: flex; margin-top: 5%">
+                        <div class="col-sm-auto">
+                            <div class="postings-header">
+                                <h4 class="postings-head" style=" text-align: center; font-weight: bold; font-size: 2.5vw; font-family: Montserrat, sans-serif; padding-top: 5%;padding-bottom: 7%;"></h4>
+                            </div>
+
+                            <div class="postings-list-cont">
+                                <ul class="postings-list">
+                                    <li @click="activePosting(1)" :class="{ activePost : active_item == 1 }" style="list-style:none;">
+                                        <div class="col-auto d-flex justify-content-left">
+                                            <button style="border: 0; background: transparent;">
+                                                <h5 class="posting-list-title" style="text-align:left; font-weight: bold; font-size: 100%; font-family: Montserrat, sans-serif; margin-top: 7%; margin-bottom: 7%;">Backend Developer</h5>
+                                            </button>
+                                            <img src="@/assets/right-arrow_large.png" alt="" id="postings-arrow">
+                                        </div>
+                                    </li>
+                                    <li @click="activePosting(2)" :class="{ activePost : active_item == 2 }" style="list-style:none;">
+                                        <div class="col-auto d-flex justify-content-left">
+                                            <button style="border: 0; background: transparent;">
+                                                <h5 class="posting-list-title" style="text-align:left; font-weight: bold; font-size: 100%; font-family: Montserrat, sans-serif; margin-top: 7%; margin-bottom: 7%;">DevOps Specialist</h5>
+                                            </button>
+                                            <img src="@/assets/right-arrow_large.png" alt="" id="postings-arrow">
+                                        </div>
+                                    </li>
+                                    <li @click="activePosting(3)" :class="{ activePost : active_item == 3 }" style="list-style:none;">
+                                        <div  class="col-auto d-flex justify-content-left">
+                                            <button style="border: 0; background: transparent;">
+                                                <h5 class="posting-list-title" style="text-align:left; font-weight: bold; font-size: 100%; font-family: Montserrat, sans-serif; margin-top: 7%; margin-bottom: 7%;">Senior Test Developer</h5>
+                                            </button>
+                                            <img src="@/assets/right-arrow_large.png" alt="" id="postings-arrow">
+                                        </div>
+                                    </li>
+                                    <li @click="activePosting(4)" :class="{ activePost : active_item == 4 }" style="list-style:none;">
+                                        <div class="col-auto d-flex justify-content-left">
+                                            <button style="border: 0; background: transparent;">
+                                                <h5 class="posting-list-title" style="text-align:left; font-weight: bold; font-size: 100%; font-family: Montserrat, sans-serif; margin-top: 7%; margin-bottom: 7%;">Junior Software Engineer</h5>
+                                            </button>
+                                            <img src="@/assets/right-arrow_large.png" alt="" id="postings-arrow">
+                                        </div>
+                                    </li>   
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            
                 
             <div class="row">
                 <div class="button-bar">
                     <div class="button-container">
-                        <img class="check-logo" src="@/assets/x_icon.png" />
-                        <img class="skip-logo" src="@/assets/skip_icon.png" />
-                        <img class="cross-logo" src="@/assets/check_mark_icon.png" />
+                        <button class="buttons-bar"><img class="check-logo" src="@/assets/x_icon.png" /></button>
+                        <button class="buttons-bar"><img class="skip-logo" src="@/assets/skip_icon.png" /></button>
+                        <button class="buttons-bar"><img class="cross-logo" src="@/assets/check_mark_icon.png" /></button>
                     </div>
                 </div>
             </div>
+
         </div>
-        
     </div>
 </template>
 
+
 <script>
 export default {
+    data() {
+        return {
+            dropItDown: true,
+            active_item:0,
+        }
+    },
     methods: {
-        switch_explore_HM(){
-            
+        activePosting:function(element){
+            this.active_item = element;
         }
     }
 };
-
-
 </script>
 
-<style>
 
-
-/* <div class="sticky-top explore-postings-container">
-                    <div class="row" id="mobile-postings-row"> <!-- hide after desktop breakpoint -->
-                        <div class="back-arrow-container col-sm-1">
-                            <button class="back-arr-button"><img class="logo" src="@/assets/left-arrow.png" /></button>
-                        </div>
-                        <div class="job-title-container col-sm-10">
-                            <div class="job-title">Full-Stack Developer</div>
-                        </div>
-                        <div class="col-sm-1"></div>
-                    </div>
-
-
-                    <div class="row d-flex justify-content-center" id="desktop-postings-row"> <!-- hide before desktop breakpoint -->
-                        
-                    </div>                        
-
-                </div> */
+<style scoped>
 
 @media only screen and (min-width: 100px) {
     * {
@@ -238,13 +264,22 @@ export default {
         display: none;
     }
 
+    #postings-arrow {
+        display:none;
+        height: 30px;
+        width: 30px;
+        margin: auto;
+    }
+    .activePost #postings-arrow{
+        display:block;
+    }
+
     .page-container {
     margin: 0;
     padding: 2%;
     width: 100%;
     height: 100vh;
     display: flex;
-    /* border: solid 5px red; */
     background-image: url(@/assets/page_curve.svg);
     background-repeat: no-repeat;
     background-position: bottom;
@@ -258,14 +293,9 @@ export default {
     border-radius: 15px;
     height: 85%;
     background: white;
-    /* margin-top: 300px; * just for adding space at top to start */
-    /* margin-bottom: 135px; */
-    
-
     }
 
     .content-container {
-    /* min-height: 100px; */
     overflow-y: scroll;
     overflow-x:hidden;
     height: 85%;
@@ -299,7 +329,6 @@ export default {
     }
 
 
-
     .social-logo-link {
         width: 2rem;
         height: auto;
@@ -313,14 +342,11 @@ export default {
         margin-left: 1.2vw; 
         margin-top: 3%;
         margin-bottom: 7%;
-        /* margin-right: 2vw; */
-        
     }
     .social-logo-git {
         width: 2rem;
         height: auto;
-        /* margin-left: 2vw; */
-         margin-top: 3%;
+        margin-top: 3%;
         margin-bottom: 7%;
     }
     .social-name-git {
@@ -411,10 +437,6 @@ export default {
         text-align: center;
         margin-bottom: 6vh;
     }
-
-    .education-info {
-        
-    }
     
     .edu-head {
         text-align: center;
@@ -427,10 +449,9 @@ export default {
     }
     .edu-head-deg {
         font-weight: bold;
-         font-family: "Montserrat", sans-serif;
+        font-family: "Montserrat", sans-serif;
         font-size: 19px; 
         margin-bottom: 1vh;
-        /* font-weight: bold; */
     }
     .edu-info {
         font-family: "Montserrat", sans-serif;
@@ -446,23 +467,19 @@ export default {
     flex-direction: column;
     align-items: center;
     }
-
     .button-bar img {
     padding: 10px;
     width: 95px;
     height: auto;
     }
+    .buttons-bar {
+        border: 0;
+        background: transparent;
+    }
 
 }
 
 @media only screen and (min-width: 992px) {
-    #mobile-postings-row {
-        display: none;
-    }
-    .explore-postings-container {
-        display: none;
-        
-    }
     .desktop-postings-cont {
         padding: 10px;
         border: 2.5px solid black;
@@ -478,11 +495,6 @@ export default {
     border-bottom-left-radius: 0%
     }
 
-
-
-    .postings-header {
-
-    }
     .postings-head {
         text-align: center;
         font-weight: bold;
@@ -491,18 +503,16 @@ export default {
         padding-top: 5%;
         padding-bottom: 7%;
     }
-    .posting-list-cont {
-
-    }
     .posting-list-title {
         font-weight: bold;
         font-size: 1.9vw; 
         font-family: "Montserrat", sans-serif;
-        margin-top: 10%;
-        margin-bottom: 10%;
+        margin:0;
     }
-    #postings-arrow {
-        
+    .posting-job-type {
+        font-family: "Montserrat", sans-serif;
+        font-size: 12px;
+        color: grey;
     }
     #posting-selected {
         display: flex;
@@ -511,45 +521,15 @@ export default {
     button {
         border: none;
         background: transparent;
-        
     }
-    /* <div class="postings-list-cont">
-                        <div class="row d-flex justify-content-center">
-                            <div class="col-sm-10">
-                                <h5 class="posting-list-title">Backend Developer</h5>
-                            </div>
-                            <div class="col-sm-2">
-                                
-                            </div>
-                        </div>
-                        <div class="row d-flex justify-content-center">
-                            <div class="col-sm-10">
-                                <h5 class="posting-list-title">DevOps Specialist</h5>
-                            </div>
-                            <div class="col-sm-2">
-
-                            </div>
-                        </div>
-                        <div class="row d-flex justify-content-center">
-                            <div class="col-sm-10">
-                                <h5 class="posting-list-title">Senior Test Developer</h5>
-                            </div>
-                            <div class="col-sm-2">
-                                <img src="@/assets/right_arrow_small.png" alt="" id="postings-arrow">
-                            </div>
-                        </div>
-                        <div class="row d-flex justify-content-center">
-                            <div class="col-sm-10">
-                                <h5 class="posting-list-title">Junior Software Engineer</h5>
-                            </div>
-                            <div class="col-sm-2">
-
-                            </div>
-                        </div> */
+    .postings-list li {
+        list-style-position: inside;
+        border-top: 1px solid lightgrey;
+        border-bottom: 1px solid lightgrey;
+    }
+    
 }
 
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap");
-
-
 
 </style>
