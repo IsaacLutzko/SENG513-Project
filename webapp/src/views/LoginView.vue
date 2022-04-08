@@ -29,7 +29,11 @@
       </div>
 
       <div class="button input-box">
-        <button @click="submitForm" class="input-button">Sign Up</button>
+        <button @click="submitForm" class="input-button">Login</button>
+      </div>
+      <div class="login-prompt input-box">
+        Not a member?
+        <router-link to="/register" class="nav-item"> Signup Here </router-link>
       </div>
     </div>
   </div>
@@ -38,6 +42,7 @@
 <script>
 import useValidate from "@vuelidate/core";
 import { reactive, computed } from "vue";
+import Websocket from "../../services/webSocket";
 import {
   required,
   email,
@@ -46,6 +51,12 @@ import {
 
 // import $ from "jquery"
 export default {
+  data() {
+    return {
+      socket: Websocket,
+    };
+  },
+
   setup() {
     const state = reactive({
       email: "",
@@ -71,9 +82,32 @@ export default {
       this.v$.$validate();
       if (!this.v$.$error) {
         alert("Form is submitted");
+        this.loginRequest();
       } else {
         alert("Invalid inputs");
       }
+    },
+    loginRequest: function () {
+      // Ask server for login confirmation
+      this.socket.emit("loginRequest", {
+        email: this.state.email,
+        password: this.state.password,
+      });
+      // Listen for a response from the server
+      this.listen();
+    },
+    listen: function () {
+      this.socket.on("HiringManager-loggedin", () => {
+        this.$router.push({ path: "/", replace: true });
+      });
+
+      this.socket.on("Jobseeker-loggedin", () => {
+        this.$router.push({ path: "/explore", replace: true });
+      });
+
+      this.socket.on("invalidCredentials", () => {
+        console.log("Invalid Credentials! Please try again");
+      });
     },
   },
 };
@@ -90,7 +124,7 @@ export default {
   margin: 0;
   padding: 0;
   width: 100%;
-  height: 100vh;
+  height: 90vh;
   display: flex;
   /* border: solid 5px red; */
   background-image: url(@/assets/login_image.png), url(@/assets/page_curve.svg);

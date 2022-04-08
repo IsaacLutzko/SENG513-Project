@@ -3,8 +3,9 @@ const http = require("http").Server(app);
 const io = require("socket.io")(http);
 const fs = require("fs");
 
-let users = [
+let jobseekers = [
   {
+    pic: null,
     email: "",
     password: "",
     firstname: "",
@@ -39,6 +40,17 @@ let users = [
   },
 ];
 
+let hiringmanagers = [
+  {
+    logo: null,
+    email: "",
+    password: "",
+    company_name: "",
+    company_logo: "",
+    posted_jobs: [],
+  },
+];
+
 // Server setup
 http.listen(process.env.PORT || 3000, () => {
   console.log("Listening on port %s", process.env.PORT || 3000);
@@ -46,86 +58,146 @@ http.listen(process.env.PORT || 3000, () => {
 
 //
 io.on("connection", (socket) => {
-  let JS_email;
+  let Curr_email;
+  let Curr_status;
   // Registering a new user
   socket.on("proposedlogin", (user) => {
     console.log("A new user has arrived");
     console.log("email:" + user.email);
 
-    // Check if email is already registered
-    const found = users.some((el) => el.email === user.email);
+    const found =
+      jobseekers.some((el) => el.email === user.email) ||
+      hiringmanagers.some((el) => el.email === user.email);
 
-    // If not add it to the users array
-    if (!found) {
-      users.push({ email: user.email, password: user.password });
-      console.log("New user with email " + user.email + " has been added");
-      io.to(socket.id).emit("loginaccepted");
-      JS_email = user.email;
-    } else {
-      console.log("denied user " + user.email);
-      io.to(socket.id).emit("logindenied");
-    }
-  });
-
-  socket.on("userData", (user) => {
-    // const found = users.some((el) => el.email === user.email);
-
-    console.log("New user data recvd:");
-
-    for (let i = 0; i < users.length; i++) {
-      // find the current user
-      if (users[i].email === JS_email) {
-        // set first name
-        users[i].firstname = user.firstname;
-        console.log(users[i].firstname);
-        // set last name
-        users[i].lastname = user.lastname;
-        console.log(users[i].lastname);
-        // set about you
-        users[i].aboutyou = user.aboutyou;
-        console.log(users[i].aboutyou);
-        // create image file
-        require("fs").writeFile(
-          "JS-profile-pics/" + JS_email + "-pic.png",
-          user.image,
-          "base64",
-          function (err) {
-            console.log(err);
-          }
+    // Job seeker
+    if (user.user_type === "Jobseeker") {
+      if (!found) {
+        Curr_email = user.email;
+        Curr_status = user.user_type;
+        jobseekers.push({ email: user.email, password: user.password });
+        console.log(
+          "New Job seeker user with email " + user.email + " has been added"
         );
-        // Job type
-        users[i].job_types = user.job_types;
-        console.log(users[i].job_types);
-        //skills
-        users[i].skills = user.skills;
-        console.log(users[i].skills);
-        // Relevant experience
-        users[i].work_experience = user.work_experience;
-        for (let j = 0; j < users[i].work_experience.length; j++) {
-          users[i].work_experience[j].job_seeker_email = JS_email;
-        }
-        console.log(users[i].work_experience);
-        // Socials
-        users[i].socials = user.socials;
-        console.log(users[i].socials);
-        // education
-        users[i].education = user.education;
-        console.log(users[i].education);
+        io.to(socket.id).emit("loginaccepted");
+      } else {
+        console.log("denied user " + user.email);
+        io.to(socket.id).emit("logindenied");
+      }
+    }
+    // Hiring manager
+    else if (user.user_type === "HiringManager") {
+      if (!found) {
+        Curr_email = user.email;
+        Curr_status = user.user_type;
+        hiringmanagers.push({ email: user.email, password: user.password });
+        console.log(
+          "New hiring manaer user with email " + user.email + " has been added"
+        );
+        io.to(socket.id).emit("loginaccepted");
+      } else {
+        console.log("denied user " + user.email);
+        io.to(socket.id).emit("logindenied");
       }
     }
   });
 
-  socket.on("base64 file", function (msg) {
-    console.log("received base64 file from");
-    // socket.broadcast.emit('base64 image', //exclude sender
-    console.log(msg);
-    require("fs").writeFile("out.png", msg, "base64", function (err) {
-      console.log(err);
-    });
-    // fs.writeFile("test.png", , "binary", function (err) {
-    //   if (err) throw err;
-    //   console.log("File saved.");
-    // });
+  socket.on("userData", (user) => {
+    console.log("New user data recvd:");
+
+    if (Curr_status === "Jobseeker") {
+      for (let i = 0; i < jobseekers.length; i++) {
+        // find the current user
+        if (jobseekers[i].email === Curr_email) {
+          // set first name
+          jobseekers[i].firstname = user.firstname;
+          console.log(jobseekers[i].firstname);
+          // set last name
+          jobseekers[i].lastname = user.lastname;
+          console.log(jobseekers[i].lastname);
+          // set about you
+          jobseekers[i].aboutyou = user.aboutyou;
+          console.log(jobseekers[i].aboutyou);
+          // store image buffer
+          jobseekers[i].pic = user.image;
+          // create image file
+          require("fs").writeFile(
+            "JS-profile-pics/" + Curr_email + "-pic.png",
+            user.image,
+            "base64",
+            function (err) {
+              console.log(err);
+            }
+          );
+
+          // Job type
+          jobseekers[i].job_types = user.job_types;
+          console.log(jobseekers[i].job_types);
+          //skills
+          jobseekers[i].skills = user.skills;
+          console.log(jobseekers[i].skills);
+          // Relevant experience
+          jobseekers[i].work_experience = user.work_experience;
+          for (let j = 0; j < jobseekers[i].work_experience.length; j++) {
+            jobseekers[i].work_experience[j].job_seeker_email = Curr_email;
+          }
+          console.log(jobseekers[i].work_experience);
+          // Socials
+          jobseekers[i].socials = user.socials;
+          console.log(jobseekers[i].socials);
+          // education
+          jobseekers[i].education = user.education;
+          console.log(jobseekers[i].education);
+        }
+      }
+    } else if (Curr_status === "HiringManager") {
+      for (let i = 0; i < hiringmanagers.length; i++) {
+        //
+        if (hiringmanagers[i].email == Curr_email) {
+          // Company Name
+          hiringmanagers[i].company_name = user.company_name;
+
+          // Store company image
+          hiringmanagers[i].logo = user.image;
+          // Company Image
+          require("fs").writeFile(
+            "HM-company-pics/" + Curr_email + "-pic.png",
+            user.image,
+            "base64",
+            function (err) {
+              console.log(err);
+            }
+          );
+        }
+      }
+      console.log("Hiring manager's user info updated");
+    }
+  });
+
+  socket.on("loginRequest", (user) => {
+    console.log("trying login credentials");
+    for (let i = 0; i < jobseekers.length; i++) {
+      if (jobseekers[i].email === user.email) {
+        if (jobseekers[i].password === user.password) {
+          io.to(socket.id).emit("Jobseeker-loggedin");
+          break;
+        }
+      }
+    }
+
+    for (let i = 0; i < hiringmanagers.length; i++) {
+      if (hiringmanagers[i].email === user.email) {
+        console.log("found HM email");
+        if (hiringmanagers[i].password === user.password) {
+          console.log("found HM password");
+          io.to(socket.id).emit("HiringManager-loggedin");
+          break;
+        }
+        console.log("NEEDED: " + hiringmanagers[i].password);
+        console.log("Given: " + user.password);
+      }
+    }
+
+    // io.to(socket.id).emit("invalidCredentials");
   });
 
   // Disconnect

@@ -705,6 +705,7 @@ export default {
         education: this.education,
       });
       console.log("user data sent to server");
+      this.$router.push({ path: "/explore", replace: true });
     },
     // readThenSendFile: function (data) {
     //   var reader = new FileReader();

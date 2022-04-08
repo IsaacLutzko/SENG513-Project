@@ -13,7 +13,8 @@
             v-if="
               this.$route.path != '/' &&
               this.$route.path != '/register' &&
-              this.$route.path != '/createaccount'
+              this.$route.path != '/createaccount' &&
+              this.$route.path != '/login'
             "
             to="/register"
             class="nav-item"
@@ -23,7 +24,8 @@
             v-if="
               this.$route.path != '/' &&
               this.$route.path != '/register' &&
-              this.$route.path != '/createaccount'
+              this.$route.path != '/createaccount' &&
+              this.$route.path != '/login'
             "
             to="/createaccount"
             class="nav-item"
@@ -33,7 +35,8 @@
             v-if="
               this.$route.path != '/' &&
               this.$route.path != '/register' &&
-              this.$route.path != '/createaccount'
+              this.$route.path != '/createaccount' &&
+              this.$route.path != '/login'
             "
             to="/explore"
             class="nav-item"
