@@ -6,15 +6,16 @@
       </div>
       <ul v-show="!moblie" class="navigation">
         <li>
-          <router-link class="link" :to="{ name: 'Explore' }"
-            >Explore</router-link
-          >
+          <!-- <router-link class="link" :to="{ name: '' }">Explore</router-link> -->
+          <p>Explore</p>
         </li>
         <li>
-          <router-link class="link" :to="{ name: '' }">Matches</router-link>
+          <!-- <router-link class="link" :to="{ name: '' }">Matches</router-link> -->
+          <p>Matches</p>
         </li>
         <li>
-          <router-link class="link" :to="{ name: '' }">Jobs</router-link>
+          <!-- <router-link class="link" :to="{ name: '' }">Profile</router-link> -->
+          <p>Profile</p>
         </li>
       </ul>
       <!-- <div class="icon">
@@ -92,6 +93,14 @@ ul,
   height: auto;
 }
 
+ul,
+p {
+  font-weight: 500;
+  list-style: none;
+  text-decoration: none;
+  height: auto;
+}
+
 li {
   color: black;
   text-transform: uppercase;
@@ -107,6 +116,18 @@ li {
 }
 
 .link:hover {
+  background-image: linear-gradient(90deg, #fc8801, #dea26a);
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+p {
+  font-size: 14px;
+  transition: 0.5s ease all;
+  padding-top: 4px;
+}
+
+p:hover {
   background-image: linear-gradient(90deg, #fc8801, #dea26a);
   background-clip: text;
   -webkit-text-fill-color: transparent;
