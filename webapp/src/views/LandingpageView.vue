@@ -1,5 +1,5 @@
 <template>
-  <div class="page-container">
+  <div class="page-container Landingpage">
     <div class="content">
       <p class="heading">divide n' hire</p>
       <div class="sub-heading-container">
@@ -7,13 +7,22 @@
         <p class="sub-heading">find you.</p>
       </div>
       <div class="btn-container">
-        <p class="join-btn">Join Now</p>
+        <button
+          v-on:click="$router.push({ path: '/register', replace: true })"
+          class="join-btn"
+        >
+          Join Now
+        </button>
       </div>
     </div>
 
     <!-- <img src="@/assets/laptop.png" /> -->
   </div>
 </template>
+
+<script>
+export default {};
+</script>
 
 <style scoped>
 * {
@@ -26,9 +35,9 @@
   margin: 0;
   padding: 0;
   width: 100%;
-  height: 100vh;
+  height: 90vh;
   display: flex;
-  border: solid 5px red;
+  /* border: solid 5px red; */
   background-image: url(@/assets/laptop.png), url(@/assets/page_curve.svg);
   background-repeat: no-repeat, no-repeat;
   background-position: top 20% right 10%, bottom;
@@ -81,6 +90,7 @@
 }
 
 .join-btn {
+  border: none;
   width: fit-content;
   padding: 10px;
   font-family: "Montserrat", sans-serif;

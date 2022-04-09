@@ -77,12 +77,14 @@ export default {
   height: 10vh;
   flex-direction: column;
 }
+
 .nav-bar {
   /* border: 2px solid red; */
   width: 100%;
   display: flex;
   flex-direction: column;
 }
+
 .logo-container {
   /* border: 2px solid blue; */
   height: 10vh;
@@ -90,10 +92,12 @@ export default {
   left: 5%;
   top: 1%;
 }
+
 .logo-container img {
   width: 125px;
   /* border: 2px solid green; */
 }
+
 .nav-text-container {
   top: 1%;
   height: 10vh;
@@ -103,9 +107,11 @@ export default {
   flex-direction: row;
   align-items: center;
 }
+
 .page-container {
   padding-bottom: 25px;
 }
+
 .nav-item {
   color: black;
   text-transform: uppercase;
@@ -113,26 +119,31 @@ export default {
   padding: 16px;
   margin-left: 16px;
 }
+
 .link {
   font-size: 14px;
   transition: 0.5s ease all;
   padding-top: 4px;
 }
+
 .link:hover {
   background-image: linear-gradient(90deg, #fc8801, #dea26a);
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+
 /*
 .nav-bar {
   background-color: white;
 }
+
 .page-container {
   background-color: white;
   z-index: 99;
   width: 100%;
   transition: 0.5s ease all;
 }
+
 .nav-bar {
   display: flex;
   flex-direction: row;
@@ -141,6 +152,7 @@ export default {
   width: 90%;
   height: auto;
 }
+
 .nav-bar .app-logo {
   display: flex;
   align-items: center;
@@ -148,17 +160,20 @@ export default {
   top: 0;
   left: 10%;
 }
+
 @media (min-width: 1140px) {
   nav {
     max-width: 1140px;
   }
 }
+
 ul {
   display: flex;
   flex-direction: row;
   position: absolute;
   right: 15%;
 }
+
 ul,
 .link {
   font-weight: 500;
@@ -166,6 +181,7 @@ ul,
   text-decoration: none;
   height: auto;
 }
+
 ul,
 p {
   font-weight: 500;
@@ -173,6 +189,7 @@ p {
   text-decoration: none;
   height: auto;
 }
+
 li {
   color: black;
   text-transform: uppercase;
@@ -180,32 +197,39 @@ li {
   padding: 16px;
   margin-left: 16px;
 }
+
 .link {
   font-size: 14px;
   transition: 0.5s ease all;
   padding-top: 4px;
 }
+
 .link:hover {
   background-image: linear-gradient(90deg, #fc8801, #dea26a);
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+
 p {
   font-size: 14px;
   transition: 0.5s ease all;
   padding-top: 4px;
 }
+
 p:hover {
   background-image: linear-gradient(90deg, #fc8801, #dea26a);
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+
 .app-logo {
   display: flex;
   align-items: center;
 }
+
 .app-logo img {
   width: 125px;
 } */
 @import url("https://fonts.googleapis.com/css2?family=Manrope:wght@700&family=ZCOOL+QingKe+HuangYou&display=swap");
+
 </style>

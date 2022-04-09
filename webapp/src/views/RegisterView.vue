@@ -1,6 +1,6 @@
 <template>
   <div class="page-container">
-    <div class="content">
+    <div v-if="this.companypopup == false" class="content">
       <div class="heading">Sign Up Form</div>
       <div class="sub-heading">Please fill in all the fields below</div>
       <div class="input-box">
@@ -55,22 +55,42 @@
         </span>
       </div>
 
-      <!-- <div class="button input-box">
-          <input
-            @click="submitForm"
-            class="input-button"
-            type="submit"
-            value="Sign Up"
-          />
-        </div> -->
       <div class="button input-box">
         <button @click="submitForm" class="input-button">Sign Up</button>
+      </div>
+      <div class="login-prompt input-box">
+        Already a member?
+        <router-link to="/login" class="nav-item"> Login here </router-link>
+      </div>
+    </div>
+    <div v-else class="content">
+      <div class="heading">Company information</div>
+      <div class="sub-heading">Please fill in all the fields below</div>
+      <div class="input-box">
+        <span class="details">Company Name</span>
+        <input
+          v-model="this.company_name"
+          class="text-area"
+          type="text"
+          placeholder="Enter company name"
+        />
+      </div>
+      <div class="input-box">
+        <img v-if="url" :src="url" class="profile-pic" />
+        <img v-else class="profile-pic" src="@/assets/user_profile_icon.png" />
+
+        <input type="file" @change="uploadImage" multiple />
+      </div>
+      <div class="button input-box">
+        <button @click="submitHMData" class="input-button">Finish</button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+// import io, { Socket } from "socket.io-client";
+import Websocket from "../../services/webSocket";
 import useValidate from "@vuelidate/core";
 import { reactive, computed } from "vue";
 import {
@@ -83,6 +103,18 @@ import {
 
 // import $ from "jquery"
 export default {
+  data: function () {
+    return {
+      email: "",
+      password: "",
+      socket: Websocket,
+      companypopup: false,
+      company_name: "",
+      url: null,
+      image: null,
+    };
+  },
+
   setup() {
     const state = reactive({
       email: "",
@@ -114,11 +146,56 @@ export default {
   methods: {
     submitForm() {
       this.v$.$validate();
+
       if (!this.v$.$error) {
-        alert("Form is submitted");
+        console.log("Form sent to server");
+        this.checkCredentials();
       } else {
         alert("Invalid inputs");
       }
+    },
+    submitHMData() {
+      this.socket.emit("userData", {
+        image: this.image,
+        company_name: this.company_name,
+      });
+      this.$router.push({ path: "/explore", replace: true });
+    },
+
+    checkCredentials: function () {
+      // Ask server for login confirmation
+      this.socket.emit("proposedlogin", {
+        email: this.state.email,
+        password: this.state.password.password,
+        user_type: this.state.user_type,
+      });
+      console.log(this.state.user_type);
+      // Listen for a response from the server
+      this.listen();
+    },
+    uploadImage: function (event) {
+      console.log(event.target.files[0]);
+      this.image = event.target.files[0];
+      const reader = new FileReader();
+      this.url = URL.createObjectURL(this.image);
+      reader.readAsDataURL(this.image);
+      // this.socket.emit("base64 file", image);
+    },
+    // All the listening functions
+    listen: function () {
+      this.socket.on("loginaccepted", () => {
+        console.log("credential accepted");
+
+        if (this.state.user_type === "HiringManager") {
+          this.companypopup = true;
+        } else if (this.state.user_type === "Jobseeker") {
+          this.$router.push({ path: "/createaccount", replace: true });
+        }
+      });
+
+      this.socket.on("logindenied", () => {
+        console.log("credential denied");
+      });
     },
   },
 };
@@ -135,7 +212,7 @@ export default {
   margin: 0;
   padding: 0;
   width: 100%;
-  height: 100vh;
+  height: 90vh;
   display: flex;
   /* border: solid 5px red; */
   background-image: url(@/assets/login_image.png), url(@/assets/page_curve.svg);
@@ -161,6 +238,11 @@ export default {
 .heading,
 .sub-heading {
   padding-bottom: 5%;
+}
+
+.profile-pic {
+  width: 200px;
+  height: auto;
 }
 
 .content {

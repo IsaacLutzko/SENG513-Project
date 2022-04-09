@@ -52,7 +52,7 @@
 export default {};
 </script>
 
-<style>
+<style scoped>
 * {
   box-sizing: border-box;
   margin: 0;
@@ -76,7 +76,7 @@ export default {};
   margin: 0;
   padding: 0;
   width: 100%;
-  height: 100vh;
+  height: 90vh;
   display: flex;
   /* border: solid 5px red; */
   background-image: url(@/assets/page_curve.svg);
@@ -87,6 +87,7 @@ export default {};
 }
 
 .container {
+  background-color: white;
   padding: 10px;
   border: 2.5px solid black;
   border-radius: 15px;
