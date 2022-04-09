@@ -38,42 +38,33 @@
                         </div>
                         <div class="job-title-container col-10">
                             <div v-if="dropItDown" class="job-title">{{activeJob}}</div>
-                            <div v-else class="job-title">Job Postings</div>
+                            <div v-else class="job-title">{{activeJob}}</div>
                         </div>
                         <div class="col-1"></div>
                     </div>
                 </div>
 
                 <div v-if="dropItDown" class="card-container">
-                    <div v-for="dynoCard in dynoCards" :key="dynoCard">
+                    <div v-for="user in activeUsers" :key="user">
 
                         <div class="row d-flex justify-content-center" id="card-img">
                             <div class="col-sm-auto">
                                 <div class="profile-image d-flex justify-content-center">
                                     <img class="logo" src="@/assets/user_profile_icon.png" /> <!-- How to make image dynamic? -->
                                 </div>
-                                <div class="profile-name">{{dynoCard.name}}</div>
+                                <div class="profile-name">{{user.firstname}} {{user.lastname}}</div>
                             </div>
                         </div>
 
 
-
-                        <!-- <div class="row d-flex justify-content-center" id="socials">
-
-                        </div> -->
-
-                        <div v-for="social in socials" :key="social" class="row d-flex justify-content-center" id="socials">
-                            <div v-if="social.linked != ''" class="col-sm-5 d-flex justify-content-center">
-                                <img class="social-logo-link" src="@/assets/LinkedInLogo.png"/>
-                                <h5 class="social-name-link">{{social.linked}}</h5> 
-                            </div>
-                            <div v-else class="col-sm-5 d-flex justify-content-center"> 
-                            </div>
-                            <div v-if="!social || !social.length" class="col-sm-5 d-flex justify-content-center">
-                                <img class="social-logo-git" src="@/assets/GitHubLogo.png" />
-                                <h5 class="social-name-git">{{social.git}}</h5> 
-                            </div>
-                            <div v-else class="col-sm-5 d-flex justify-content-center"> 
+                        <div class="social-cont">
+                            <div v-for="social in user.socials" :key="social" class="row socials">
+                                <div v-if="social.platform == 'LinkedIn'" class="social-icon col">
+                                    <a target="_blank" :href="social.link" aria-label="Next"><img class="social-logo-link" src="@/assets/LinkedInLogo.png"/></a>
+                                </div>
+                                <div v-else class="social-icon col"> 
+                                    <a target="_blank" :href="social.link" aria-label="Next"><img class="social-logo-link" src="@/assets/GitHubLogo.png"/></a>
+                                </div>
                             </div>
                         </div>
 
@@ -85,7 +76,7 @@
                                 <div class="about-me-header">
                                     <h5 class="header-about">About Me</h5>
                                 </div>
-                                <div class="about-me-desc">{{dynoCard.aboutMe}}</div>
+                                <div class="about-me-desc">{{user.aboutyou}}</div>
                             </div>
                         </div>
 
@@ -93,14 +84,14 @@
                                 <div class="experience-header">
                                     <h5 class="experience-head">Experience</h5>
                                 </div>
-                            <div v-for="workExp in workExps" :key="workExp" class="col-sm-auto">
+                            <div v-for="workExp in user.work_experience" :key="workExp" class="col-sm-auto">
                                 <!-- first work experience example -->
                                 <div class="work-example1">
                                     <div class="work-header1">
-                                        <h5 class="work-head1">{{workExp.jobTitle}}</h5>
+                                        <h5 class="work-head1">{{workExp.job_title}}</h5>
                                     </div>
-                                    <div class="work-info">{{workExp.jobInfo}}</div>
-                                    <div class="work-exp-desc"> {{workExp.jobDesc}} </div>
+                                    <div class="work-info">{{workExp.company}} - {{workExp.years}} years</div>
+                                    <div class="work-exp-desc"> {{workExp.description}} </div>
                                 </div>
                             </div>
                         </div>
@@ -109,7 +100,7 @@
                                 <div class="skills-header">
                                     <h5 class="skills-head">Skills</h5>
                                 </div>
-                            <div v-for="skill in skills" :key="skill" class="col-sm-auto">
+                            <div v-for="skill in user.skills" :key="skill" class="col-sm-auto">
                                 <div class="skill-list">
                                     <label>{{skill.name}}</label>
                                 </div>
@@ -125,12 +116,12 @@
                         </div>
 
                         <div class="row d-flex justify-content-start" id="education-info">
-                            <div v-for="education in educations" :key="education" class="col-12">
+                            <div v-for="education in user.educations" :key="education" class="col-12">
                                 <div class="edu-ex1">
                                     <div class="edu-head1">
-                                        <h5 class="edu-head-deg">{{education.degree}}</h5> 
+                                        <h5 class="edu-head-deg">{{education.degree_type}} at {{education.institute}}</h5> 
                                     </div>
-                                    <div class="edu-info">{{education.years}}</div>
+                                    <div class="edu-info">{{education.start_date}}  ---  {{education.end_date}}</div>
                                 </div>
                             </div>
                         </div>
@@ -191,61 +182,120 @@ export default {
                 {jobtitle: "Software Engineer", jobtype: "Internship"},
             ],
             activeJob: "",
-            dynoCards:
+            users:
             [
                 {
-                    name: "Isaac Lutzko",
-                    aboutMe: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras imperdiet sagittis orci, ac dignissim nulla tempor eget. Proin varius, diam non pharetra feugiat, libero odio fermentum lacus, eu congue risus odio id elit. Maecenas imperdiet tempor sapien, eu imperdiet dolor. Phasellus turpis sapien, dapibus vehicula ante ac, eleifend porttitor sapien. Maecenas consectetur et nunc non elementum. Donec pharetra nisl pulvinar dolor tincidunt, rhoncus ornare lorem malesuada.",
-                }
-            ],
-            socials: 
-            [
-                {
-                    linked: "",
-                    git: "IsaacLutzko"
-                }
-            ],
-            // linkedInValid: true,
-            // gitValid: (true),
-            workExps:
-            [
-                {
-                    jobTitle: "Test Summer Student",
-                    jobInfo: "SMART Technologies - Summer Student - 8 months",
-                    jobDesc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras imperdiet sagittis orci, ac dignissim nulla tempor eget. Proin varius, diam non pharetra feugiat, libero odio fermentum lacus, eu congue risus odio id elit. Maecenas imperdiet tempor sapien, eu imperdiet dolor. Phasellus turpis sapien, dapibus vehicula ante ac, eleifend porttitor sapien. Maecenas consectetur et nunc non elementum. Donec pharetra nisl pulvinar dolor tincidunt, rhoncus ornare lorem malesuada.",
+                    firstname: "Isaac",
+                    lastname: "Lutzko",
+                    aboutyou: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras imperdiet sagittis orci, ac dignissim nulla tempor eget. Proin varius, diam non pharetra feugiat, libero odio fermentum lacus, eu congue risus odio id elit. Maecenas imperdiet tempor sapien, eu imperdiet dolor. Phasellus turpis sapien, dapibus vehicula ante ac, eleifend porttitor sapien. Maecenas consectetur et nunc non elementum. Donec pharetra nisl pulvinar dolor tincidunt, rhoncus ornare lorem malesuada.",
+                    job_types: ["Software Engineer", "Full Stack Dev"],
+                    socials:
+                    [
+                        {
+                            platform: "LinkedIn",
+                            link: "https://www.linkedin.com/mynetwork/"
+                        },
+                        {
+                            platform: "GitHub",
+                            link: "https://github.com/"
+                        }
+                    ],
+                    skills: [
+                        {   name: "C++", },
+                        {   name: "JavaScript" },
+                        {   name: "Git" },
+                        {   name: "SQL" },
+                        {   name: "Python" }
+                    ],
+                    work_experience:
+                    [
+                        {
+                            job_title: "Test Summer Student",
+                            company: "SMART Technologies",
+                            years: "1",
+                            description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras imperdiet sagittis orci, ac dignissim nulla tempor eget. Proin varius, diam non pharetra feugiat, libero odio fermentum lacus, eu congue risus odio id elit. Maecenas imperdiet tempor sapien, eu imperdiet dolor. Phasellus turpis sapien, dapibus vehicula ante ac, eleifend porttitor sapien. Maecenas consectetur et nunc non elementum. Donec pharetra nisl pulvinar dolor tincidunt, rhoncus ornare lorem malesuada.",
+                        },
+                        {
+                            job_title: "Test Summer Student",
+                            company: "SMART Technologies",
+                            years: "1",
+                            description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras imperdiet sagittis orci, ac dignissim nulla tempor eget. Proin varius, diam non pharetra feugiat, libero odio fermentum lacus, eu congue risus odio id elit. Maecenas imperdiet tempor sapien, eu imperdiet dolor. Phasellus turpis sapien, dapibus vehicula ante ac, eleifend porttitor sapien. Maecenas consectetur et nunc non elementum. Donec pharetra nisl pulvinar dolor tincidunt, rhoncus ornare lorem malesuada.",
+                        }
+                    ],
+                    educations:
+                    [
+                        {
+                            institute: "U of C",
+                            start_date: "2017-09-13",
+                            end_date: "2023-04-30",
+                            degree_type: "BSc in Computer Science"
+                        }
+                    ]
                 },
                 {
-                    jobTitle: "Test Summer Student",
-                    jobInfo: "SMART Technologies - Summer Student - 8 months",
-                    jobDesc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras imperdiet sagittis orci, ac dignissim nulla tempor eget. Proin varius, diam non pharetra feugiat, libero odio fermentum lacus, eu congue risus odio id elit. Maecenas imperdiet tempor sapien, eu imperdiet dolor. Phasellus turpis sapien, dapibus vehicula ante ac, eleifend porttitor sapien. Maecenas consectetur et nunc non elementum. Donec pharetra nisl pulvinar dolor tincidunt, rhoncus ornare lorem malesuada.",
+                    firstname: "Ahad",
+                    lastname: "Hamirani",
+                    aboutyou: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras imperdiet sagittis orci, ac dignissim nulla tempor eget. Proin varius, diam non pharetra feugiat, libero odio fermentum lacus, eu congue risus odio id elit. Maecenas imperdiet tempor sapien, eu imperdiet dolor. Phasellus turpis sapien, dapibus vehicula ante ac, eleifend porttitor sapien. Maecenas consectetur et nunc non elementum. Donec pharetra nisl pulvinar dolor tincidunt, rhoncus ornare lorem malesuada.",
+                    job_types: ["DevOps Specialist", "Full Stack Dev"],
+                    socials:
+                    [
+                        {
+                            platform: "LinkedIn",
+                            link: "https://www.linkedin.com/mynetwork/"
+                        },
+                        {
+                            platform: "GitHub",
+                            link: "https://github.com/"
+                        }
+                    ],
+                    skills: [
+                        {   name: "C++", },
+                        {   name: "JavaScript" },
+                        {   name: "Git" },
+                        {   name: "SQL" },
+                        {   name: "Python" }
+                    ],
+                    work_experience:
+                    [
+                        {
+                            job_title: "Test Summer Student",
+                            company: "SMART Technologies",
+                            years: "1",
+                            description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras imperdiet sagittis orci, ac dignissim nulla tempor eget. Proin varius, diam non pharetra feugiat, libero odio fermentum lacus, eu congue risus odio id elit. Maecenas imperdiet tempor sapien, eu imperdiet dolor. Phasellus turpis sapien, dapibus vehicula ante ac, eleifend porttitor sapien. Maecenas consectetur et nunc non elementum. Donec pharetra nisl pulvinar dolor tincidunt, rhoncus ornare lorem malesuada.",
+                        },
+                        {
+                            job_title: "Test Summer Student",
+                            company: "SMART Technologies",
+                            years: "1",
+                            description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras imperdiet sagittis orci, ac dignissim nulla tempor eget. Proin varius, diam non pharetra feugiat, libero odio fermentum lacus, eu congue risus odio id elit. Maecenas imperdiet tempor sapien, eu imperdiet dolor. Phasellus turpis sapien, dapibus vehicula ante ac, eleifend porttitor sapien. Maecenas consectetur et nunc non elementum. Donec pharetra nisl pulvinar dolor tincidunt, rhoncus ornare lorem malesuada.",
+                        }
+                    ],
+                    educations:
+                    [
+                        {
+                            institute: "U of C",
+                            start_date: "2017-09-13",
+                            end_date: "2023-04-30",
+                            degree_type: "BSc in Computer Science"
+                        }
+                    ]
                 }
             ],
-            skills:
-            [
-                {   name: "C++", },
-                {   name: "JavaScript" },
-                {   name: "Git" },
-                {   name: "SQL" },
-                {   name: "Python" }
-            ],
-            educations:
-            [
-                {
-                    degree: "BSc in Computer Science at U of C",
-                    years: "2017 - 2023"
-                },
-                {
-                    degree: "BComm in Business at U of C",
-                    years: "2017 - 2023"
-                }
-            ]
-
+            activeUsers: [],
         }
     },
     methods: {
         activePosting:function(element, jobVar){
             this.active_item = element;
             this.activeJob = jobVar;
+            this.activeUsers.length = 0;
+            for (let i=0; i < this.users.length; i++) {
+                for (let j=0; j < this.users[i].job_types.length; j++) {
+                    if (this.users[i].job_types[j] === this.activeJob) {
+                        this.activeUsers.push(this.users[i]);
+                    }
+                }
+            }
         },
 
     }
@@ -273,6 +323,32 @@ export default {
     }
     .activePost #postings-arrow{
         display:block;
+    }
+
+    .social-icon:hover {
+        transform:translateY(-3px);
+    }
+    .social-logo-link {
+        width: 3rem;
+
+        /* height: auto; */
+        
+        
+    }
+    .social-cont {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        justify-content: center;
+    }
+
+    .socials {
+        padding-left: 4%;
+        padding-right: 4%;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        margin-bottom: 12%;
     }
 
     .page-container {
@@ -329,44 +405,6 @@ export default {
         font-size: 25px;
     }
 
-
-    .social-logo-link {
-        width: 2rem;
-        height: auto;
-        margin-top: 3%;
-        margin-bottom: 7%;
-    }
-    .social-name-link {
-        margin: 0;
-        display: flex;
-        align-items: center;
-        margin-left: 1.2vw; 
-        margin-top: 3%;
-        margin-bottom: 7%;
-    }
-    .social-logo-git {
-        width: 2rem;
-        height: auto;
-        margin-top: 3%;
-        margin-bottom: 7%;
-    }
-    .social-name-git {
-        margin: 0;
-        display: flex;
-        align-items: center;
-        margin-left: 1.2vw;
-         margin-top: 3%;
-        margin-bottom: 7%;
-    }
-
-    #socials {
-        font-family: "Montserrat", sans-serif;
-        font-weight: 300;
-        font-size: 20px;
-        align-items: center;
-        margin-top: 3%;
-        margin-bottom: 7%;
-    }
     #card-img {
         padding-top: 5%;
         margin-bottom: 3%;
