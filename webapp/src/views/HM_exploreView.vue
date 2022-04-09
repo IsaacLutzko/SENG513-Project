@@ -355,7 +355,7 @@ export default {
     margin: 0;
     padding: 2%;
     width: 100%;
-    height: 100vh;
+    height: 90vh;
     display: flex;
     background-image: url(@/assets/page_curve.svg);
     background-repeat: no-repeat;

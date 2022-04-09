@@ -283,7 +283,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .input-box {
   padding: 5px;
   display: flex;
@@ -330,7 +330,7 @@ export default {
 }
 
 .heading-container {
-  width: 100%;
+  width: 90%;
   display: flex;
   flex-direction: column;
   align-items: center;

@@ -98,7 +98,7 @@ export default {
     },
     listen: function () {
       this.socket.on("HiringManager-loggedin", () => {
-        this.$router.push({ path: "/", replace: true });
+        this.$router.push({ path: "/hiringmanager-explore", replace: true });
       });
 
       this.socket.on("Jobseeker-loggedin", () => {

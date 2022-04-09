@@ -159,7 +159,7 @@ export default {
         image: this.image,
         company_name: this.company_name,
       });
-      this.$router.push({ path: "/explore", replace: true });
+      this.$router.push({ path: "/hiringmanager-explore", replace: true });
     },
 
     checkCredentials: function () {

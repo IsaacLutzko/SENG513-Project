@@ -1,8 +1,6 @@
 <template>
   <div class="page-container">
-    <div class="container">
-      <div class="row"></div>
-    </div>
+    <h1>MATCHES PAGE</h1>
   </div>
 </template>
 
@@ -10,7 +8,7 @@
 export default {};
 </script>
 
-<style>
+<style scoped>
 * {
   box-sizing: border-box;
   margin: 0;
@@ -21,7 +19,7 @@ export default {};
   margin: 0;
   padding: 0;
   width: 100%;
-  height: 100vh;
+  height: 90vh;
   display: flex;
   /* border: solid 5px red; */
   background-image: url(@/assets/page_curve.svg);

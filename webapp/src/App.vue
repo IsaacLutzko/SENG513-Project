@@ -8,41 +8,116 @@
           /></router-link>
         </div>
 
-        <div class="nav-text-container">
-          <router-link
-            v-if="
-              this.$route.path != '/' &&
-              this.$route.path != '/register' &&
-              this.$route.path != '/createaccount' &&
-              this.$route.path != '/login'
-            "
-            to="/register"
-            class="nav-item"
-            >Register</router-link
-          >
-          <router-link
-            v-if="
-              this.$route.path != '/' &&
-              this.$route.path != '/register' &&
-              this.$route.path != '/createaccount' &&
-              this.$route.path != '/login'
-            "
-            to="/createaccount"
-            class="nav-item"
-            >Create</router-link
-          >
-          <router-link
-            v-if="
-              this.$route.path != '/' &&
-              this.$route.path != '/register' &&
-              this.$route.path != '/createaccount' &&
-              this.$route.path != '/login'
-            "
-            to="/explore"
-            class="nav-item"
-            >Explore</router-link
-          >
+        <div class="full-size">
+          <!-- Job seeker -->
+          <div class="nav-text-container">
+            <router-link
+              v-if="
+                this.$route.path != '/' &&
+                this.$route.path != '/register' &&
+                this.$route.path != '/createaccount' &&
+                this.$route.path != '/login' &&
+                this.$route.path != '/hiringmanager-explore' &&
+                this.$route.path != '/hiringmanager-matches' &&
+                this.$route.path != '/hiringmanager-postedjobs' &&
+                this.$route.path != '/hiringmanager-addjob'
+              "
+              to="/jobseeker-explore"
+              class="nav-item"
+              >Explore</router-link
+            >
+            <router-link
+              v-if="
+                this.$route.path != '/' &&
+                this.$route.path != '/register' &&
+                this.$route.path != '/createaccount' &&
+                this.$route.path != '/login' &&
+                this.$route.path != '/hiringmanager-explore' &&
+                this.$route.path != '/hiringmanager-matches' &&
+                this.$route.path != '/hiringmanager-postedjobs' &&
+                this.$route.path != '/hiringmanager-addjob'
+              "
+              to="/jobseeker-matches"
+              class="nav-item"
+              >Matches</router-link
+            >
+            <router-link
+              v-if="
+                this.$route.path != '/' &&
+                this.$route.path != '/register' &&
+                this.$route.path != '/createaccount' &&
+                this.$route.path != '/login' &&
+                this.$route.path != '/hiringmanager-explore' &&
+                this.$route.path != '/hiringmanager-matches' &&
+                this.$route.path != '/hiringmanager-postedjobs' &&
+                this.$route.path != '/hiringmanager-addjob'
+              "
+              to="#"
+              class="nav-item"
+              >Profile</router-link
+            >
+
+            <!-- HiringManager -->
+            <router-link
+              v-if="
+                this.$route.path != '/' &&
+                this.$route.path != '/register' &&
+                this.$route.path != '/createaccount' &&
+                this.$route.path != '/login' &&
+                this.$route.path != '/jobseeker-explore' &&
+                this.$route.path != '/jobseeker-matches' &&
+                this.$route.path != '/jobseeker-profile' &&
+                this.$route.path != '/jobseeker-edit-profile'
+              "
+              to="/hiringmanager-explore"
+              class="nav-item"
+              >Explore</router-link
+            >
+            <router-link
+              v-if="
+                this.$route.path != '/' &&
+                this.$route.path != '/register' &&
+                this.$route.path != '/createaccount' &&
+                this.$route.path != '/login' &&
+                this.$route.path != '/jobseeker-explore' &&
+                this.$route.path != '/jobseeker-matches' &&
+                this.$route.path != '/jobseeker-profile' &&
+                this.$route.path != '/jobseeker-edit-profile'
+              "
+              to="/hiringmanager-matches"
+              class="nav-item"
+              >Matches</router-link
+            >
+            <router-link
+              v-if="
+                this.$route.path != '/' &&
+                this.$route.path != '/register' &&
+                this.$route.path != '/createaccount' &&
+                this.$route.path != '/login' &&
+                this.$route.path != '/jobseeker-explore' &&
+                this.$route.path != '/jobseeker-matches' &&
+                this.$route.path != '/jobseeker-profile' &&
+                this.$route.path != '/jobseeker-edit-profile'
+              "
+              to="/hiringmanager-postedjobs"
+              class="nav-item"
+              >Jobs</router-link
+            >
+            <!-- Universal logout -->
+            <router-link
+              v-if="
+                this.$route.path != '/' &&
+                this.$route.path != '/register' &&
+                this.$route.path != '/createaccount' &&
+                this.$route.path != '/login'
+              "
+              to="/login"
+              class="nav-item"
+              >Logout</router-link
+            >
+          </div>
         </div>
+        <div class="collapsed-button"></div>
       </div>
     </div>
   </div>
@@ -118,118 +193,18 @@ export default {
   font-family: "Manrope", sans-serif;
   padding: 16px;
   margin-left: 16px;
-}
-
-.link {
-  font-size: 14px;
+  font-size: 15px;
   transition: 0.5s ease all;
   padding-top: 4px;
-}
-
-.link:hover {
-  background-image: linear-gradient(90deg, #fc8801, #dea26a);
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-/*
-.nav-bar {
-  background-color: white;
-}
-
-.page-container {
-  background-color: white;
-  z-index: 99;
-  width: 100%;
-  transition: 0.5s ease all;
-}
-
-.nav-bar {
-  display: flex;
-  flex-direction: row;
-  margin: 0 auto;
-  transition: 0.5s ease all;
-  width: 90%;
-  height: auto;
-}
-
-.nav-bar .app-logo {
-  display: flex;
-  align-items: center;
-  position: absolute;
-  top: 0;
-  left: 10%;
-}
-
-@media (min-width: 1140px) {
-  nav {
-    max-width: 1140px;
-  }
-}
-
-ul {
-  display: flex;
-  flex-direction: row;
-  position: absolute;
-  right: 15%;
-}
-
-ul,
-.link {
-  font-weight: 500;
-  list-style: none;
   text-decoration: none;
-  height: auto;
+  font-weight: bolder;
 }
 
-ul,
-p {
-  font-weight: 500;
-  list-style: none;
-  text-decoration: none;
-  height: auto;
-}
-
-li {
-  color: black;
-  text-transform: uppercase;
-  font-family: "Manrope", sans-serif;
-  padding: 16px;
-  margin-left: 16px;
-}
-
-.link {
-  font-size: 14px;
-  transition: 0.5s ease all;
-  padding-top: 4px;
-}
-
-.link:hover {
+.nav-item:hover {
   background-image: linear-gradient(90deg, #fc8801, #dea26a);
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-p {
-  font-size: 14px;
-  transition: 0.5s ease all;
-  padding-top: 4px;
-}
-
-p:hover {
-  background-image: linear-gradient(90deg, #fc8801, #dea26a);
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.app-logo {
-  display: flex;
-  align-items: center;
-}
-
-.app-logo img {
-  width: 125px;
-} */
-@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@700&family=ZCOOL+QingKe+HuangYou&display=swap");
-
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap");
 </style>
