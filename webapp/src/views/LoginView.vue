@@ -102,7 +102,7 @@ export default {
       });
 
       this.socket.on("Jobseeker-loggedin", () => {
-        this.$router.push({ path: "/explore", replace: true });
+        this.$router.push({ path: "/jobseeker-explore", replace: true });
       });
 
       this.socket.on("invalidCredentials", () => {

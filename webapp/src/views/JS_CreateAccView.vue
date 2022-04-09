@@ -705,7 +705,7 @@ export default {
         education: this.education,
       });
       console.log("user data sent to server");
-      this.$router.push({ path: "/explore", replace: true });
+      this.$router.push({ path: "/jobseeker-explore", replace: true });
     },
     // readThenSendFile: function (data) {
     //   var reader = new FileReader();
@@ -840,10 +840,6 @@ export default {
 .profile-pic {
   width: 200px;
   height: auto;
-}
-
-.col-class {
-  /* border: 2px solid blue; */
 }
 
 .dropdown-box {

@@ -13,7 +13,7 @@ const routes = [
   { path: "", name: "Landingpage", component: Landingpage },
   { path: "/register", name: "Registerpage", component: Registerpage },
   { path: "/createaccount", name: "CreateAcc", component: CreateAcc },
-  { path: "/explore", name: "Explorepage", component: Explorepage },
+  { path: "/jobseeker-explore", name: "Explorepage", component: Explorepage },
   { path: "/login", name: "Loginpage", component: Loginpage },
 ];
 
