@@ -15,10 +15,11 @@
             <!-- <div v-for="(job,index) in jobs" :key="index" class="matches-list"> -->
 
             <ul v-for="[key, value] in jobs" :key="key" class="matches-list">
+              <!-- <div v-for="(index, entry) in value" :key="index" class="wrapper"> -->
               <li style="list-style: none">
                 <div class="col-auto d-flex justify-content-left">
                   <button
-                    @click="activePosting(key, value.job_type)"
+                    @click="activePosting(key, key)"
                     :class="{ activePost: active_item == key }"
                     style="border: 0; background: transparent"
                   >
@@ -39,7 +40,7 @@
                   </button>
 
                   <button
-                    @click="activePosting(key, value.job_type)"
+                    @click="activePosting(key, key)"
                     :class="{ activePost: active_item == key }"
                   >
                     <img
@@ -50,11 +51,11 @@
                   </button>
                 </div>
 
-                <div v-for="(index, indexJob) in value" :key="indexJob">
-                  <div v-if="active_item == index" class="posting-job-type">
+                <div v-for="index in value" :key="index">
+                  <div v-if="active_item == key" class="posting-job-type">
                     <div>
                       <button
-                        @click="activeJSeek(indexJob, index.seeker_name)"
+                        @click="activeJSeek(index, index.seeker_name)"
                         :class="{ activeJobSeeker: active_job == index }"
                       >
                         {{ index.seeker_name }}
@@ -126,15 +127,16 @@
                 <!-- <div v-for="(job,index) in jobs" :key="index" class="matches-list"> -->
 
                 <ul
-                  v-for="(index, value) in matches"
-                  :key="index"
+                  v-for="[key, value] in jobs"
+                  :key="key"
                   class="matches-list"
                 >
+                  <!-- <div v-for="(index, entry) in value" :key="index" class="wrapper"> -->
                   <li style="list-style: none">
                     <div class="col-auto d-flex justify-content-left">
                       <button
-                        @click="activePosting(index, value.job_type)"
-                        :class="{ activePost: active_item == index }"
+                        @click="activePosting(key, key)"
+                        :class="{ activePost: active_item == key }"
                         style="border: 0; background: transparent"
                       >
                         <h5
@@ -148,14 +150,14 @@
                             margin-bottom: 7%;
                           "
                         >
-                          Hi
-                          <!-- {{ key }} -->
+                          <!-- hello -->
+                          {{ key }}
                         </h5>
                       </button>
 
                       <button
-                        @click="activePosting(index, value.job_type)"
-                        :class="{ activePost: active_item == index }"
+                        @click="activePosting(key, key)"
+                        :class="{ activePost: active_item == key }"
                       >
                         <img
                           src="@/assets/right-arrow_large.png"
@@ -165,17 +167,14 @@
                       </button>
                     </div>
 
-                    <div
-                      v-for="(jobseeker, indexJob) in job.jobseekers"
-                      :key="indexJob"
-                    >
-                      <div v-if="active_item == index" class="posting-job-type">
+                    <div v-for="index in value" :key="index">
+                      <div v-if="active_item == key" class="posting-job-type">
                         <div>
                           <button
-                            @click="activeJSeek(indexJob, jobseeker.name)"
-                            :class="{ activeJobSeeker: active_job == indexJob }"
+                            @click="activeJSeek(index, index.seeker_name)"
+                            :class="{ activeJobSeeker: active_job == index }"
                           >
-                            {{ jobseeker.name }}
+                            {{ index.seeker_name }}
                           </button>
                         </div>
                       </div>
@@ -234,8 +233,11 @@ export default {
   },
   methods: {
     activePosting: function (element, jobVar) {
-      this.active_item = 1;
+      this.active_item = element;
       this.activeJob = jobVar;
+      console.log(jobVar);
+      console.log(element);
+      console.log("test");
     },
     activeJSeek: function (element, jsVar) {
       this.active_job = element;
@@ -274,8 +276,9 @@ export default {
             this.jobs.set(this.matches[i].job_type, [this.matches[i]]);
           }
         }
-        // console.log(this.matches);
+        console.log(this.matches);
         console.log(this.jobs);
+        // console.log(Array.from(this.jobs)[0]);
 
         // let temp = this.groupBy(this.matches, "job_type");
         // console.log(temp);

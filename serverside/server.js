@@ -383,34 +383,34 @@ io.on("connection", (socket) => {
 
       jobseekers[js_index].liked_jobs.push(obj.job_id);
 
+      // check for match
+      const job_index = jobs.findIndex((el) => {
+        return el.job_id === obj.job_id;
+      });
+
+      if (jobs[job_index].likes_job_seeker !== null) {
+        for (let i = 0; i < jobs[job_index].likes_job_seeker.length; i++) {
+          if (jobs[job_index].likes_job_seeker[i] === Curr_email) {
+            console.log(
+              "Matched " + Curr_email + " with " + jobs[job_index].job_type
+            );
+            matches.push({
+              job_id: obj.job_id,
+              job_seeker_email: Curr_email,
+              hiring_manager_email: jobs[job_index].hiring_manager_email,
+              seeker_name: jobseekers[js_index].firstname,
+              job_type: jobs[job_index].job_type,
+            });
+          }
+        }
+      }
+
       // unliked
     } else if (obj.choice === "unlike") {
       used.push(obj.job_id);
       console.log("pushed job" + obj.job_id);
 
       jobseekers[js_index].unliked_jobs.push(obj.job_id);
-    }
-
-    // check for match
-    const job_index = jobs.findIndex((el) => {
-      return el.job_id === obj.job_id;
-    });
-
-    if (jobs[job_index].likes_job_seeker !== null) {
-      for (let i = 0; i < jobs[job_index].likes_job_seeker.length; i++) {
-        if (jobs[job_index].likes_job_seeker[i] === Curr_email) {
-          console.log(
-            "Matched " + Curr_email + " with " + jobs[job_index].job_type
-          );
-          matches.push({
-            job_id: obj.job_id,
-            job_seeker_email: Curr_email,
-            hiring_manager_email: jobs[job_index].hiring_manager_email,
-            seeker_name: jobseekers[js_index].firstname,
-            job_type: jobs[job_index].job_type,
-          });
-        }
-      }
     }
 
     console.log("used: " + used);
@@ -543,6 +543,26 @@ io.on("connection", (socket) => {
       }
       console.log("pushed jobseeker to liked");
 
+      //check for match
+      const jj_index = jobseekers.findIndex((el) => {
+        return el.email === obj.email;
+      });
+
+      for (let i = 0; i < jobseekers[jj_index].liked_jobs.length; i++) {
+        if (jobseekers[jj_index].liked_jobs[i] === obj.job_id) {
+          console.log(
+            "Matched " + obj.type + " with " + jobseekers[jj_index].email
+          );
+          matches.push({
+            job_id: obj.job_id,
+            job_seeker_email: jobseekers[jj_index].email,
+            hiring_manager_email: Curr_email,
+            seeker_name: jobseekers[jj_index].firstname,
+            job_type: obj.type,
+          });
+        }
+      }
+
       //
     } else if (obj.choice === "unlike") {
       if (used_seekers.has(obj.type)) {
@@ -564,26 +584,6 @@ io.on("connection", (socket) => {
       }
     }
     // console.log("Added: " + used_seekers.get(obj.type));
-
-    //check for match
-    const jj_index = jobseekers.findIndex((el) => {
-      return el.email === obj.email;
-    });
-
-    for (let i = 0; i < jobseekers[jj_index].liked_jobs.length; i++) {
-      if (jobseekers[jj_index].liked_jobs[i] === obj.job_id) {
-        console.log(
-          "Matched " + obj.type + " with " + jobseekers[jj_index].email
-        );
-        matches.push({
-          job_id: obj.job_id,
-          job_seeker_email: jobseekers[jj_index].email,
-          hiring_manager_email: Curr_email,
-          seeker_name: jobseekers[jj_index].firstname,
-          job_type: obj.type,
-        });
-      }
-    }
   });
 
   //
@@ -696,6 +696,26 @@ io.on("connection", (socket) => {
       io.to(socket.id).emit("HMMatches", your_matches);
     } else if (matches_found === false) {
       io.to(socket.id).emit("HMnoMatches");
+    }
+  });
+
+  socket.on("getMatches_JS", () => {
+    let your_matches = [];
+    let matches_found = false;
+
+    // console.log(matches);
+
+    for (let i = 0; i < matches.length; i++) {
+      if (matches[i].job_seeker_email === Curr_email) {
+        your_matches.push(matches[i]);
+        matches_found = true;
+      }
+    }
+
+    if (matches_found === true) {
+      io.to(socket.id).emit("JSMatches", your_matches);
+    } else if (matches_found === false) {
+      io.to(socket.id).emit("JSnoMatches");
     }
   });
 
