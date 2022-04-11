@@ -1,24 +1,23 @@
 <template>
   <div class="row page-container">
-    <div v-if="dropItDown" class="desktop-postings-cont col-lg-3">
+    <div v-if="dropItDown" class="desktop-matches-cont col-lg-3">
       <div
         class="row d-flex justify-content-center"
-        id="explore-postings-header"
+        id="hm-matches-header"
         style="overflow-y: scroll; overflow-x: hidden"
       >
         <div class="col-sm-auto">
-          <div class="postings-header">
-            <h4 class="postings-head">Your Postings</h4>
+          <div class="matches-sidebar-header">
+            <h4 class="matches-sidebar-head">Matches</h4>
           </div>
-
-          <div class="postings-list-cont">
+          <div class="matches-list-cont">
             <ul
-              v-for="(posting, index) in postings"
+              v-for="(match, index) in matches"
               :key="index"
-              class="postings-list"
+              class="matches-list"
             >
               <li
-                @click="activePosting(index, posting.job_type)"
+                @click="activePosting(index, match.job_type)"
                 :class="{ activePost: active_item == index }"
                 style="list-style: none"
               >
@@ -35,7 +34,7 @@
                         margin-bottom: 7%;
                       "
                     >
-                      {{ posting.job_type }}
+                      {{ match.job_type }}
                     </h5>
                   </button>
                   <img
@@ -56,7 +55,7 @@
     </div>
 
     <div class="container col-lg-9">
-      <div v-if="available" class="content-container">
+      <div class="content-container">
         <div class="sticky-top explore-postings-container">
           <div class="row" id="mobile-postings-row">
             <!-- hide after desktop breakpoint -->
@@ -69,10 +68,15 @@
             </div>
             <div class="job-title-container col-10">
               <div v-if="dropItDown" class="job-title">{{ activeJob }}</div>
-              <div v-else class="job-title">{{ activeJob }}</div>
+              <div v-else class="job-title">My Matches</div>
             </div>
             <div class="col-1"></div>
           </div>
+        </div>
+
+        <!-- Messages go here -->
+        <div v-if="dropItDown" class="msg-container">
+          <ul id="messages"></ul>
         </div>
 
         <div
@@ -82,7 +86,7 @@
         >
           <div
             class="row d-flex justify-content-center"
-            id="explore-postings-header"
+            id="hm-matches-header"
             style="
               overflow-y: scroll;
               overflow-x: hidden;
@@ -97,77 +101,62 @@
             "
           >
             <div class="col-sm-auto">
-              <div class="postings-header">
-                <h4
-                  class="postings-head"
-                  style="
-                    text-align: center;
-                    font-weight: bold;
-                    font-size: 2.5vw;
-                    font-family: Montserrat, sans-serif;
-                    padding-top: 5%;
-                    padding-bottom: 7%;
-                  "
-                ></h4>
-              </div>
-              <div class="postings-list-cont">
-                <ul
-                  v-for="(posting, index) in postings"
-                  :key="index"
-                  class="postings-list"
-                >
-                  <li
-                    @click="activePosting(index, posting.job_type)"
-                    :class="{ activePost: active_item == index }"
-                    style="list-style: none"
-                  >
-                    <div class="col-auto d-flex justify-content-left">
-                      <button style="border: 0; background: transparent">
-                        <h5
-                          class="posting-list-title"
-                          style="
-                            text-align: left;
-                            font-weight: bold;
-                            font-size: 100%;
-                            font-family: Montserrat, sans-serif;
-                            margin-top: 7%;
-                            margin-bottom: 7%;
-                          "
-                        >
-                          {{ posting.job_type }}
-                        </h5>
-                      </button>
-                      <img
-                        src="@/assets/right-arrow_large.png"
-                        alt=""
-                        id="postings-arrow"
-                      />
-                    </div>
-                  </li>
-                </ul>
-              </div>
-            </div>
+          <div class="matches-sidebar-header">
+            <h4 class="matches-sidebar-head">Matches</h4>
+          </div>
+          <div class="matches-list-cont">
+            <ul
+              v-for="(match, index) in matches"
+              :key="index"
+              class="matches-list"
+            >
+              <li
+                @click="activePosting(index, match.job_type)"
+                :class="{ activePost: active_item == index }"
+                style="list-style: none"
+              >
+                <div class="col-auto d-flex justify-content-left">
+                  <button style="border: 0; background: transparent">
+                    <h5
+                      class="posting-list-title"
+                      style="
+                        text-align: left;
+                        font-weight: bold;
+                        font-size: 1.9vw;
+                        font-family: Montserrat, sans-serif;
+                        margin-top: 7%;
+                        margin-bottom: 7%;
+                      "
+                    >
+                      {{ match.job_type }}
+                    </h5>
+                  </button>
+                  <img
+                    src="@/assets/right-arrow_large.png"
+                    alt=""
+                    id="postings-arrow"
+                    style="width=30%"
+                  />
+                </div>
+                <div class="col-auto d-flex justify-content-left">
+                  <!-- <p class="posting-job-type">{{ posting.jobtype }}</p> -->
+                </div>
+              </li>
+            </ul>
           </div>
         </div>
-      </div>
-      <div v-else class="content-container">
-        <h1>No New Candidates for this job</h1>
+          </div>
+        </div>
       </div>
 
-      <div class="row">
-        <div class="button-bar">
-          <div class="button-container">
-            <button @click="choice('unlike')" class="buttons-bar">
-              <img class="check-logo" src="@/assets/x_icon.png" />
-            </button>
-            <!-- <button class="buttons-bar">
-              <img class="skip-logo" src="@/assets/skip_icon.png" />
-            </button> -->
-            <button @click="choice('like')" class="buttons-bar">
-              <img class="cross-logo" src="@/assets/check_mark_icon.png" />
-            </button>
-          </div>
-        </div>
+      <div v-if="dropItDown" class="row message-box">
+        <form id="message-form-box" action="">
+          <input id="input-message" autocomplete="off" />
+          <button id="send-button">
+            <p id="send-text">SEND</p>
+            <img src="@/assets/send_icon.png" alt="" id="send-img" />
+          </button>
+        </form>
       </div>
     </div>
   </div>
@@ -179,6 +168,8 @@ export default {
   data() {
     return {
       socket: Websocket,
+      dropItDown: true,
+      active_item: 0,
       matches: [
         {
           job_id: null,
@@ -214,6 +205,14 @@ export default {
       this.socket.on("JSnoMatches", () => {
         console.log("no matches");
       });
+    },
+
+    activePosting: function (element, jobVar) {
+      this.active_item = element;
+      this.activeJob = jobVar;
+      console.log(jobVar);
+      console.log(element);
+      console.log("test");
     },
 
     // logincheck: function () {
@@ -252,11 +251,13 @@ export default {
   }
 
   #postings-arrow {
-    /* display:none; */
-    display: block;
-    height: 20px;
-    width: 20px;
+    display: none;
+    height: 30px;
+    width: 30px;
     margin: auto;
+  }
+  .activePost #postings-arrow {
+    display: block;
   }
 
   button {
