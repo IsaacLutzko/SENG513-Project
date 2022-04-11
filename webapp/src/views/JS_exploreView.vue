@@ -1,36 +1,36 @@
 <template>
   <div class="page-container">
-    <div class="container">
+    <div v-if="jobs" class="container">
       <div class="content-container">
         <div class="row row-one">
           <div class="logo-container col-auto">
             <img class="logo" src="@/assets/google-logo.png" />
           </div>
           <div class="col-auto">
-            <div class="role-title">Junior Full Stack</div>
-            <div class="company-title">Google</div>
-            <div class="location-title">Palo Alto, California</div>
+            <div class="role-title">{{ this.job_title }}</div>
+            <div class="company-title">{{ this.company }}</div>
+            <div class="location-title">{{ this.location }}</div>
+            <div class="location-title">Est. $ {{ this.salary }}</div>
+            <div class="location-title">Start date: {{ this.start_date }}</div>
           </div>
         </div>
         <div class="row">
           <div class="col-lg-9">
             <div class="heading">Job Description</div>
             <div class="body-content">
-              As a Full Stack Developer, you will be working as part of a small,
-              dynamic development team, directly alongside the co-founders of
-              Level. Together, our team delivers world-class strategic financial
-              advice and bookkeeping services to one of the most underserved,
-              and largest small business segments on the planet. You’ll have
-              endless opportunities to be a problem solver, and drive positive
-              change in people’s lives.
+              {{ this.description }}
             </div>
           </div>
           <div class="col-lg-3">
-            <div class="heading">Experienced</div>
+            <div class="heading">Required Skills</div>
             <div class="body-content">
-              <ul>
-                <li>Full Stack: 2 years</li>
+              <ul v-for="skill in skills" :key="skill">
+                <li class="skill-item">{{ skill }}</li>
               </ul>
+            </div>
+            <div class="heading">Experience</div>
+            <div class="body-content">
+              {{ this.req_expeirence }} years in relevant field
             </div>
           </div>
         </div>
@@ -38,18 +38,98 @@
       <div class="row">
         <div class="button-bar">
           <div class="button-container">
-            <img class="check-logo" src="@/assets/x_icon.png" />
-            <img class="skip-logo" src="@/assets/skip_icon.png" />
-            <img class="cross-logo" src="@/assets/check_mark_icon.png" />
+            <img
+              @click="choice('unlike')"
+              class="cross-logo"
+              src="@/assets/x_icon.png"
+            />
+            <!-- <img class="skip-logo" src="@/assets/skip_icon.png" /> -->
+            <img
+              @click="choice('like')"
+              class="check-logo"
+              src="@/assets/check_mark_icon.png"
+            />
           </div>
         </div>
       </div>
+    </div>
+    <div v-else class="container">
+      <h1>No Job Matches</h1>
     </div>
   </div>
 </template>
 
 <script>
-export default {};
+import Websocket from "../../services/webSocket";
+
+export default {
+  data() {
+    return {
+      refresh: null,
+      jobs: false,
+      socket: Websocket,
+      job_id: 0,
+      job_title: "",
+      location: "",
+      start_date: "",
+      description: "",
+      skills: [],
+      logo: null,
+      company: "",
+      req_expeirence: "",
+      salary: "",
+    };
+  },
+  methods: {
+    choice: function (choice) {
+      this.socket.emit("jobchoice", {
+        choice: choice,
+        job_id: this.job_id,
+      });
+      console.log("id sent:" + this.job_id);
+      this.getJob(this.job_id);
+    },
+
+    getJob: function (curr_id) {
+      this.socket.emit("jobrequest", curr_id);
+      this.listen();
+    },
+    listen: function () {
+      this.socket.on("givenjob", (job) => {
+        console.log("job given");
+        this.jobs = true;
+        this.job_id = job.job_id;
+        this.job_title = job.job_title;
+        this.company = job.company;
+        this.location = job.location;
+        this.description = job.description;
+        this.skills = job.skills;
+        this.start_date = job.start_date;
+        this.salary = job.salary;
+        this.req_expeirence = job.req_expeirence;
+      });
+
+      // this.socket.on("notloggedin", () => {
+      //   this.$router.push({ path: "/login", replace: true });
+      // });
+
+      this.socket.on("nojobmatches", () => {
+        this.jobs = false;
+      });
+    },
+  },
+  mounted() {
+    this.getJob();
+    this.refresh = window.setInterval(() => {
+      if (this.jobs === false) {
+        this.getJob();
+      }
+    }, 10000);
+  },
+  unmounted: function () {
+    clearInterval(this.refresh);
+  },
+};
 </script>
 
 <style scoped>
@@ -64,6 +144,10 @@ export default {};
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.skill-item {
+  margin-left: 5%;
 }
 
 .button-bar img {
@@ -116,6 +200,7 @@ export default {};
 .company-title {
   font-family: "Montserrat", sans-serif;
   font-size: 25px;
+  font-weight: 550;
 }
 
 .location-title {

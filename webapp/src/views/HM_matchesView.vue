@@ -205,9 +205,11 @@
 </template>
 
 <script>
+import Websocket from "../../services/webSocket";
 export default {
   data() {
     return {
+      socket: Websocket,
       dropItDown: true,
       active_item: 0,
       jobs: [
@@ -236,6 +238,23 @@ export default {
           ],
         },
       ],
+      matches: [
+        {
+          job_id: null,
+          job_seeker_email: "",
+          hiring_manager_email: "",
+          job_type: "",
+          seeker_name: "",
+          messages: [
+            {
+              message_id: "",
+              content: "",
+              sender: "",
+              reciever: "",
+            },
+          ],
+        },
+      ],
       active_job: 0,
     };
   },
@@ -248,7 +267,52 @@ export default {
       this.active_job = element;
       this.activeJS = jsVar;
     },
+    // Accepts the array and key
+    groupBy: function (array, key) {
+      // Return the end result
+      return array.reduce((result, currentValue) => {
+        // If an array already present for key, push it to the array. Else create an array and push the object
+        (result[currentValue[key]] = result[currentValue[key]] || []).push(
+          currentValue
+        );
+        // Return the current iteration `result` value, this will be taken as next iteration `result` value and accumulate
+        return result;
+      }, {}); // empty object is the initial value for result object
+    },
+    getMatches: function () {
+      this.socket.emit("getMatches_HM");
+      this.listen();
+    },
+
+    //
+
+    listen: function () {
+      this.socket.on("HMMatches", (matches_recvd) => {
+        this.matches = matches_recvd;
+        let temp = this.groupBy(this.matches, "job_type");
+        console.log(temp);
+      });
+
+      //
+      this.socket.on("HMnoMatches", () => {
+        console.log("no matches");
+      });
+    },
+
+    // logincheck: function () {
+    //   this.socket.emit("logincheck");
+    //   this.listen();
+    // },
+    // listen: function () {
+    //   this.socket.on("notloggedin", () => {
+    //     this.$router.push({ path: "/login", replace: true });
+    //   });
+    // },
   },
+  mounted() {
+    this.getMatches();
+  },
+  // this.logincheck();
 };
 </script>
 

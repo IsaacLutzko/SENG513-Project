@@ -72,12 +72,13 @@
               class="form-select dropdown-box"
               aria-label="Default select example"
             >
+              <option value="≤1">≤1</option>
               <option value="1">1</option>
               <option value="2">2</option>
               <option value="3">3</option>
               <option value="4">4</option>
               <option value="5">5</option>
-              <option value="5">5+</option>
+              <option value="5+">5+</option>
             </select>
           </div>
           <div class="col-lg-4">
@@ -99,7 +100,7 @@
                 v-model="salary"
                 class="name-field text-area"
                 type="text"
-                placeholder="Enter estimated salary"
+                placeholder="Enter estimated yearly salary"
                 required
               />
             </div>
@@ -261,15 +262,18 @@
       </div>
     </div>
     <div class="button input-box">
-      <input class="input-button" type="submit" value="Add Job" />
+      <button class="input-button" @click="newJob">Add Job</button>
     </div>
   </div>
 </template>
 
 <script>
+import Websocket from "../../services/webSocket";
+
 export default {
   data() {
     return {
+      socket: Websocket,
       job_type: "",
       job_title: "",
       location: "",
@@ -279,6 +283,33 @@ export default {
       skills: [],
       jobdescription: "",
     };
+  },
+  methods: {
+    newJob: function () {
+      this.socket.emit("addJob", {
+        job_type: this.job_type,
+        job_title: this.job_title,
+        location: this.location,
+        req_expeirence: this.experience,
+        salary: this.salary,
+        start_date: this.startdate,
+        skills: this.skills,
+        description: this.jobdescription,
+      });
+      this.$router.push({ path: "/hiringmanager-postedjobs", replace: true });
+    },
+    // logincheck: function () {
+    //   this.socket.emit("logincheck");
+    //   this.listen();
+    // },
+
+    // listen: function () {
+    //   this.socket.on("notloggedin", () => {
+    //     this.$router.push({ path: "/login", replace: true });
+    //   });
+
+    //   this.socket.on("loggedin", () => {});
+    // },
   },
 };
 </script>

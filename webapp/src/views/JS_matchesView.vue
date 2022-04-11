@@ -5,7 +5,26 @@
 </template>
 
 <script>
-export default {};
+import Websocket from "../../services/webSocket";
+export default {
+  data() {
+    return {
+      socket: Websocket,
+    };
+  },
+  methods: {
+    // logincheck: function () {
+    //   this.socket.emit("logincheck");
+    //   this.listen();
+    // },
+    // listen: function () {
+    //   this.socket.on("notloggedin", () => {
+    //     this.$router.push({ path: "/login", replace: true });
+    //   });
+    //   this.socket.on("loggedin", () => {});
+    // },
+  },
+};
 </script>
 
 <style scoped>

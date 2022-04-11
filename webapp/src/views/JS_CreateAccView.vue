@@ -76,10 +76,9 @@
                 Information Security analyst
               </option>
               <option value="UX designer">UX designer</option>
-              <option value="UX designer">UX designer</option>
               <option value="Software Developer">Software Developer</option>
               <option value="Front-end Developer">Front-end Developer</option>
-              <option value="Back-end Developer">Back-end Developer</option>
+              <option value="Backend Developer">Back-end Developer</option>
               <option value="Full-stack Developer">Full-stack Developer</option>
               <option value="Project Manager">Project Manager</option>
               <option value="Software Engineer">Software Engineer</option>
@@ -114,10 +113,9 @@
                 Information Security analyst
               </option>
               <option value="UX designer">UX designer</option>
-              <option value="UX designer">UX designer</option>
               <option value="Software Developer">Software Developer</option>
               <option value="Front-end Developer">Front-end Developer</option>
-              <option value="Back-end Developer">Back-end Developer</option>
+              <option value="Backend Developer">Back-end Developer</option>
               <option value="Full-stack Developer">Full-stack Developer</option>
               <option value="Project Manager">Project Manager</option>
               <option value="Software Engineer">Software Engineer</option>
@@ -149,10 +147,9 @@
                 Information Security analyst
               </option>
               <option value="UX designer">UX designer</option>
-              <option value="UX designer">UX designer</option>
               <option value="Software Developer">Software Developer</option>
               <option value="Front-end Developer">Front-end Developer</option>
-              <option value="Back-end Developer">Back-end Developer</option>
+              <option value="Backend Developer">Back-end Developer</option>
               <option value="Full-stack Developer">Full-stack Developer</option>
               <option value="Project Manager">Project Manager</option>
               <option value="Software Engineer">Software Engineer</option>
@@ -693,7 +690,7 @@ export default {
     },
     sendUserData: function () {
       this.socket.emit("userData", {
-        image: this.image,
+        image: this.url,
         firstname: this.state.firstname,
         lastname: this.state.lastname,
         aboutyou: this.state.aboutyou,
@@ -707,40 +704,26 @@ export default {
       console.log("user data sent to server");
       this.$router.push({ path: "/jobseeker-explore", replace: true });
     },
-    // readThenSendFile: function (data) {
-    //   var reader = new FileReader();
-    //   reader.onload = function (evt) {
-    //     var msg = {};
-    //     msg.file = evt.target.result;
-    //     msg.fileName = data.name;
-    //     this.socket.emit("base64 file", msg);
-    //   };
-    //   reader.readAsDataURL(data);
-    // },
+
     uploadImage: function (event) {
       console.log(event.target.files[0]);
       this.image = event.target.files[0];
       const reader = new FileReader();
       this.url = URL.createObjectURL(this.image);
       reader.readAsDataURL(this.image);
-      // this.socket.emit("base64 file", image);
     },
+    // logincheck: function () {
+    //   this.socket.emit("logincheck");
+    //   this.listen();
+    // },
+    // listen: function () {
+    //   this.socket.on("notloggedin", () => {
+    //     this.$router.push({ path: "/login", replace: true });
+    //   });
+    // },
   },
+  // this.logincheck();
 };
-
-// import $ from "jquery";
-// $(document).ready(function () {
-//   const BtnAdd = document.querySelector(".addjob-btn");
-//   BtnAdd.addEventListener("click", AddJob);
-
-//   function AddJob() {
-//     let newDiv = document.querySelector("#hidden-temp");
-//     var clone = newDiv.cloneNode(true);
-//     clone.id = "job";
-//     const Divcontainer = document.querySelector("#jobscontainer");
-//     Divcontainer.appendChild(clone);
-//   }
-// });
 </script>
 
 <style scoped>

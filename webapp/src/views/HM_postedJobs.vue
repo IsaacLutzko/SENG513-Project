@@ -17,37 +17,42 @@
           </div>
         </div>
 
-        <div
-          v-for="(postedJob, index) in postedJobs"
-          :key="index"
-          class="job-container"
-        >
-          <div class="row job-top">
-            <div class="job-cont-top col-11">
-              <h3>{{ postedJob.title }}</h3>
-              <h5>{{ postedJob.location }}</h5>
+        <div v-if="jobs_avaliable">
+          <div
+            v-for="(postedJob, index) in this.postedJobs"
+            :key="index"
+            class="job-container"
+          >
+            <div class="row job-top">
+              <div class="job-cont-top col-11">
+                <h3>{{ postedJob.job_title }}</h3>
+                <h5>{{ postedJob.location }}</h5>
+                <h5>Est. $ {{ postedJob.salary }}</h5>
+                <h5>{{ postedJob.start_date }}</h5>
+              </div>
+              <div class="job-cont-delete col-1 d-flex justify-content-center">
+                <button @click="deleteJob(index)">
+                  <img class="add-job-logo" src="@/assets/black_cross.png" />
+                </button>
+              </div>
             </div>
-            <div class="job-cont-delete col-1 d-flex justify-content-center">
-              <button @click="deleteJob(index)">
-                <img class="add-job-logo" src="@/assets/black_cross.png" />
-              </button>
-            </div>
-          </div>
 
-          <div class="row job-info">
-            <div class="job-cont-desc col-9">
-              <h5>Job Description</h5>
-              <p>{{ postedJob.description }}</p>
-            </div>
-            <div class="job-cont-exp col-3">
-              <h5>Experience Required</h5>
-              <div
-                v-for="experience in postedJob.experiences"
-                :key="experience"
-              >
-                <ul>
-                  <li>{{ experience.type }}</li>
-                </ul>
+            <div class="row job-info">
+              <div class="job-cont-desc col-9">
+                <h5>Job Description</h5>
+                <p>{{ postedJob.description }}</p>
+              </div>
+              <div class="job-cont-exp col-3">
+                <h5>Skills Required</h5>
+                <div class="body-content">
+                  <ul v-for="skill in postedJob.skills" :key="skill">
+                    <li class="skill-item">{{ skill }}</li>
+                  </ul>
+                </div>
+                <h5>Experience</h5>
+                <div>
+                  {{ postedJob.req_expeirence }} years of relevant experience
+                </div>
               </div>
             </div>
           </div>
@@ -58,81 +63,65 @@
 </template>
 
 <script>
+import Websocket from "../../services/webSocket";
 export default {
   data() {
     return {
+      socket: Websocket,
+      jobs_avaliable: false,
       postedJobs: [
         {
-          title: "Junior Full Stack Developer",
-          location: "Palo Ato, California",
-          description:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras imperdiet sagittis orci, ac dignissim nulla tempor eget. Proin varius, diam non pharetra feugiat, libero odio fermentum lacus, eu congue risus odio id elit. Maecenas imperdiet tempor sapien, eu imperdiet dolor. Phasellus turpis sapien, dapibus vehicula ante ac, eleifend porttitor sapien. Maecenas consectetur et nunc non elementum. Donec pharetra nisl pulvinar dolor tincidunt, rhoncus ornare lorem malesuada.",
-          experiences: [
-            { type: "2+ Years in relevant field" },
-            { type: "10+ Years in irrelevant field" },
-          ],
-        },
-        {
-          title: "Software Engineer",
-          location: "Montreal, Quebec",
-          description:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras imperdiet sagittis orci, ac dignissim nulla tempor eget. Proin varius, diam non pharetra feugiat, libero odio fermentum lacus, eu congue risus odio id elit. Maecenas imperdiet tempor sapien, eu imperdiet dolor. Phasellus turpis sapien, dapibus vehicula ante ac, eleifend porttitor sapien. Maecenas consectetur et nunc non elementum. Donec pharetra nisl pulvinar dolor tincidunt, rhoncus ornare lorem malesuada.",
-          experiences: [
-            { type: "5+ Years with SQL" },
-            { type: "10+ Years in irrelevant field" },
-          ],
-        },
-        {
-          title: "Full Stack Developer",
-          location: "Calgary, Alberta",
-          description:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras imperdiet sagittis orci, ac dignissim nulla tempor eget. Proin varius, diam non pharetra feugiat, libero odio fermentum lacus, eu congue risus odio id elit. Maecenas imperdiet tempor sapien, eu imperdiet dolor. Phasellus turpis sapien, dapibus vehicula ante ac, eleifend porttitor sapien. Maecenas consectetur et nunc non elementum. Donec pharetra nisl pulvinar dolor tincidunt, rhoncus ornare lorem malesuada.",
-          experiences: [
-            { type: "2+ Years JavaScript" },
-            { type: "10+ Years in irrelevant field" },
-          ],
-        },
-        {
-          title: "Full Stack Developer",
-          location: "Calgary, Alberta",
-          description:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras imperdiet sagittis orci, ac dignissim nulla tempor eget. Proin varius, diam non pharetra feugiat, libero odio fermentum lacus, eu congue risus odio id elit. Maecenas imperdiet tempor sapien, eu imperdiet dolor. Phasellus turpis sapien, dapibus vehicula ante ac, eleifend porttitor sapien. Maecenas consectetur et nunc non elementum. Donec pharetra nisl pulvinar dolor tincidunt, rhoncus ornare lorem malesuada.",
-          experiences: [
-            { type: "2+ Years JavaScript" },
-            { type: "10+ Years in irrelevant field" },
-          ],
-        },
-        {
-          title: "Full Stack Developer",
-          location: "Calgary, Alberta",
-          description:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras imperdiet sagittis orci, ac dignissim nulla tempor eget. Proin varius, diam non pharetra feugiat, libero odio fermentum lacus, eu congue risus odio id elit. Maecenas imperdiet tempor sapien, eu imperdiet dolor. Phasellus turpis sapien, dapibus vehicula ante ac, eleifend porttitor sapien. Maecenas consectetur et nunc non elementum. Donec pharetra nisl pulvinar dolor tincidunt, rhoncus ornare lorem malesuada.",
-          experiences: [
-            { type: "2+ Years JavaScript" },
-            { type: "10+ Years in irrelevant field" },
-          ],
-        },
-        {
-          title: "Full Stack Developer",
-          location: "Calgary, Alberta",
-          description:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras imperdiet sagittis orci, ac dignissim nulla tempor eget. Proin varius, diam non pharetra feugiat, libero odio fermentum lacus, eu congue risus odio id elit. Maecenas imperdiet tempor sapien, eu imperdiet dolor. Phasellus turpis sapien, dapibus vehicula ante ac, eleifend porttitor sapien. Maecenas consectetur et nunc non elementum. Donec pharetra nisl pulvinar dolor tincidunt, rhoncus ornare lorem malesuada.",
-          experiences: [
-            { type: "2+ Years JavaScript" },
-            { type: "10+ Years in irrelevant field" },
-          ],
+          job_id: null,
+          job_title: "",
+          location: "",
+          description: "",
+          req_expeirence: "",
+          skills: [],
+          salary: "",
+          start_date: "",
         },
       ],
     };
   },
   methods: {
     deleteJob: function (index) {
+      //
+      console.log(index);
+      console.log(this.postedJobs[index].job_id);
+      this.socket.emit("deleteJob", this.postedJobs[index].job_id);
       this.postedJobs.splice(index, 1);
     },
     addJob: function () {
       this.$router.push({ path: "/hiringmanager-addjob", replace: true });
     },
+    getPostings: function () {
+      this.socket.emit("getpostedjobs");
+      this.listen();
+    },
+    listen: function () {
+      this.socket.on("givepostedjobs", (jobs) => {
+        this.jobs_avaliable = true;
+        this.postedJobs = jobs;
+      });
+
+      this.socket.on("nopostedjobs", () => {
+        this.jobs_avaliable = false;
+      });
+    },
+    // logincheck: function () {
+    //   this.socket.emit("logincheck");
+    //   this.listen();
+    // },
+    // listen: function () {
+    //   this.socket.on("notloggedin", () => {
+    //     this.$router.push({ path: "/login", replace: true });
+    //   });
+    // },
   },
+  mounted() {
+    this.getPostings();
+  },
+  // this.logincheck();
 };
 </script>
 
