@@ -683,6 +683,8 @@ io.on("connection", (socket) => {
     let your_matches = [];
     let matches_found = false;
 
+    console.log(matches);
+
     for (let i = 0; i < matches.length; i++) {
       if (matches[i].hiring_manager_email === Curr_email) {
         your_matches.push(matches[i]);

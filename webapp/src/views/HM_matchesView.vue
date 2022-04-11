@@ -14,12 +14,12 @@
           <div class="matches-list-cont">
             <!-- <div v-for="(job,index) in jobs" :key="index" class="matches-list"> -->
 
-            <ul v-for="(job, index) in jobs" :key="index" class="matches-list">
+            <ul v-for="[key, value] in jobs" :key="key" class="matches-list">
               <li style="list-style: none">
                 <div class="col-auto d-flex justify-content-left">
                   <button
-                    @click="activePosting(index, job.title)"
-                    :class="{ activePost: active_item == index }"
+                    @click="activePosting(key, value.job_type)"
+                    :class="{ activePost: active_item == key }"
                     style="border: 0; background: transparent"
                   >
                     <h5
@@ -33,13 +33,14 @@
                         margin-bottom: 7%;
                       "
                     >
-                      {{ job.title }}
+                      <!-- hello -->
+                      {{ key }}
                     </h5>
                   </button>
 
                   <button
-                    @click="activePosting(index, job.title)"
-                    :class="{ activePost: active_item == index }"
+                    @click="activePosting(key, value.job_type)"
+                    :class="{ activePost: active_item == key }"
                   >
                     <img
                       src="@/assets/right-arrow_large.png"
@@ -49,17 +50,14 @@
                   </button>
                 </div>
 
-                <div
-                  v-for="(jobseeker, indexJob) in job.jobseekers"
-                  :key="indexJob"
-                >
+                <div v-for="(index, indexJob) in value" :key="indexJob">
                   <div v-if="active_item == index" class="posting-job-type">
                     <div>
                       <button
-                        @click="activeJSeek(indexJob, jobseeker.name)"
-                        :class="{ activeJobSeeker: active_job == indexJob }"
+                        @click="activeJSeek(indexJob, index.seeker_name)"
+                        :class="{ activeJobSeeker: active_job == index }"
                       >
-                        {{ jobseeker.name }}
+                        {{ index.seeker_name }}
                       </button>
                     </div>
                   </div>
@@ -128,14 +126,14 @@
                 <!-- <div v-for="(job,index) in jobs" :key="index" class="matches-list"> -->
 
                 <ul
-                  v-for="(job, index) in jobs"
+                  v-for="(index, value) in matches"
                   :key="index"
                   class="matches-list"
                 >
                   <li style="list-style: none">
                     <div class="col-auto d-flex justify-content-left">
                       <button
-                        @click="activePosting(index, job.title)"
+                        @click="activePosting(index, value.job_type)"
                         :class="{ activePost: active_item == index }"
                         style="border: 0; background: transparent"
                       >
@@ -150,12 +148,13 @@
                             margin-bottom: 7%;
                           "
                         >
-                          {{ job.title }}
+                          Hi
+                          <!-- {{ key }} -->
                         </h5>
                       </button>
 
                       <button
-                        @click="activePosting(index, job.title)"
+                        @click="activePosting(index, value.job_type)"
                         :class="{ activePost: active_item == index }"
                       >
                         <img
@@ -212,32 +211,7 @@ export default {
       socket: Websocket,
       dropItDown: true,
       active_item: 0,
-      jobs: [
-        {
-          title: "Full Stack Developer",
-          jobseekers: [
-            { name: "Viktor Hovland" },
-            { name: "Isaac" },
-            { name: "Harry Higgs" },
-          ],
-        },
-        {
-          title: "Front End Developer",
-          jobseekers: [
-            { name: "Danny Willett" },
-            { name: "Patrick Cantlay" },
-            { name: "Sungjae Im" },
-          ],
-        },
-        {
-          title: "Junior Dev",
-          jobseekers: [
-            { name: "Corey Conners" },
-            { name: "Cameron Smith" },
-            { name: "Joaquin Niemann" },
-          ],
-        },
-      ],
+      jobs: new Map(),
       matches: [
         {
           job_id: null,
@@ -260,7 +234,7 @@ export default {
   },
   methods: {
     activePosting: function (element, jobVar) {
-      this.active_item = element;
+      this.active_item = 1;
       this.activeJob = jobVar;
     },
     activeJSeek: function (element, jsVar) {
@@ -289,8 +263,22 @@ export default {
     listen: function () {
       this.socket.on("HMMatches", (matches_recvd) => {
         this.matches = matches_recvd;
-        let temp = this.groupBy(this.matches, "job_type");
-        console.log(temp);
+
+        //
+        // let temp = new Map();
+
+        for (let i = 0; i < this.matches.length; i++) {
+          if (this.jobs.has(this.matches[i].job_type)) {
+            this.jobs.get(this.matches[i].job_type).push(this.matches[i]);
+          } else {
+            this.jobs.set(this.matches[i].job_type, [this.matches[i]]);
+          }
+        }
+        // console.log(this.matches);
+        console.log(this.jobs);
+
+        // let temp = this.groupBy(this.matches, "job_type");
+        // console.log(temp);
       });
 
       //
