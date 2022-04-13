@@ -76,7 +76,20 @@
 
         <!-- Messages go here -->
         <div v-if="dropItDown" class="msg-container">
-          <ul id="messages"></ul>
+          <ul id="messages">
+            <li
+              v-for="message in this.matches[active_item].messages"
+              :key="message"
+              :class="
+                message.sender == this.matches[active_item].job_seeker_email
+                  ? 'user-msg'
+                  : 'other-msg'
+              "
+              id="text-message"
+            >
+              {{ message.content }}
+            </li>
+          </ul>
         </div>
 
         <div
@@ -101,57 +114,62 @@
             "
           >
             <div class="col-sm-auto">
-          <div class="matches-sidebar-header">
-            <h4 class="matches-sidebar-head">Matches</h4>
-          </div>
-          <div class="matches-list-cont">
-            <ul
-              v-for="(match, index) in matches"
-              :key="index"
-              class="matches-list"
-            >
-              <li
-                @click="activePosting(index, match.job_type)"
-                :class="{ activePost: active_item == index }"
-                style="list-style: none"
-              >
-                <div class="col-auto d-flex justify-content-left">
-                  <button style="border: 0; background: transparent">
-                    <h5
-                      class="posting-list-title"
-                      style="
-                        text-align: left;
-                        font-weight: bold;
-                        font-size: 1.9vw;
-                        font-family: Montserrat, sans-serif;
-                        margin-top: 7%;
-                        margin-bottom: 7%;
-                      "
-                    >
-                      {{ match.job_type }}
-                    </h5>
-                  </button>
-                  <img
-                    src="@/assets/right-arrow_large.png"
-                    alt=""
-                    id="postings-arrow"
-                    style="width=30%"
-                  />
-                </div>
-                <div class="col-auto d-flex justify-content-left">
-                  <!-- <p class="posting-job-type">{{ posting.jobtype }}</p> -->
-                </div>
-              </li>
-            </ul>
-          </div>
-        </div>
+              <div class="matches-sidebar-header">
+                <h4 class="matches-sidebar-head">Matches</h4>
+              </div>
+              <div class="matches-list-cont">
+                <ul
+                  v-for="(match, index) in matches"
+                  :key="index"
+                  class="matches-list"
+                >
+                  <li
+                    @click="activePosting(index, match.job_type)"
+                    :class="{ activePost: active_item == index }"
+                    style="list-style: none"
+                  >
+                    <div class="col-auto d-flex justify-content-left">
+                      <button style="border: 0; background: transparent">
+                        <h5
+                          class="posting-list-title"
+                          style="
+                            text-align: left;
+                            font-weight: bold;
+                            font-size: 1.9vw;
+                            font-family: Montserrat, sans-serif;
+                            margin-top: 7%;
+                            margin-bottom: 7%;
+                          "
+                        >
+                          {{ match.job_type }}
+                        </h5>
+                      </button>
+                      <img
+                        src="@/assets/right-arrow_large.png"
+                        alt=""
+                        id="postings-arrow"
+                        style="width=30%"
+                      />
+                    </div>
+                    <div class="col-auto d-flex justify-content-left">
+                      <!-- <p class="posting-job-type">{{ posting.jobtype }}</p> -->
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
       <div v-if="dropItDown" class="row message-box">
-        <form id="message-form-box" action="">
-          <input id="input-message" autocomplete="off" />
+        <form @submit.prevent="sendMessage" id="message-form-box">
+          <input
+            type="text"
+            id="input-message"
+            autocomplete="off"
+            v-model="curr_message"
+          />
           <button id="send-button">
             <p id="send-text">SEND</p>
             <img src="@/assets/send_icon.png" alt="" id="send-img" />
@@ -167,11 +185,13 @@ import Websocket from "../../services/webSocket";
 export default {
   data() {
     return {
+      curr_message: "",
       socket: Websocket,
       dropItDown: true,
       active_item: 0,
       matches: [
         {
+          match_id: null,
           job_id: null,
           job_seeker_email: "",
           hiring_manager_email: "",
@@ -179,7 +199,6 @@ export default {
           seeker_name: "",
           messages: [
             {
-              message_id: "",
               content: "",
               sender: "",
               reciever: "",
@@ -191,11 +210,30 @@ export default {
     };
   },
   methods: {
-    getJSMatches: function () {
-      this.socket.on("getMatches_JS");
-      this.listen();
+    sendMessage: function () {
+      this.socket.emit("js_msg", {
+        match_id: this.matches[this.active_item].match_id,
+        sender: this.matches[this.active_item].job_seeker_email,
+        reciever: this.matches[this.active_item].hiring_manager_email,
+        content: this.curr_message,
+      });
+      console.log("msg sent to server");
     },
-    listen: function () {
+
+    getJSMatches: function () {
+      console.log("sent");
+      this.socket.emit("getMatchesJS");
+    },
+    msg_listen: function () {
+      //
+      this.socket.on("notloggedin", () => {
+        this.$router.push({ path: "/login", replace: true });
+      });
+
+      //
+      this.socket.on("loggedin", () => {
+        this.getJSMatches();
+      });
       //
       this.socket.on("JSMatches", (matches_recvd) => {
         this.matches = matches_recvd;
@@ -205,6 +243,17 @@ export default {
       this.socket.on("JSnoMatches", () => {
         console.log("no matches");
       });
+
+      this.socket.on("msg", (match) => {
+        if (this.matches[this.active_item].match_id === match.match_id) {
+          this.matches[this.active_item].messages.push(match.message);
+          console.log("pushed message");
+        }
+      });
+
+      this.socket.on("chatlog", (log) => {
+        this.matches[this.active_item].messages = log;
+      });
     },
 
     activePosting: function (element, jobVar) {
@@ -213,12 +262,15 @@ export default {
       console.log(jobVar);
       console.log(element);
       console.log("test");
+      this.getChatlog();
+    },
+    getChatlog() {
+      this.socket.emit("getChatlog", this.matches[this.active_item].match_id);
     },
 
-    // logincheck: function () {
-    //   this.socket.emit("logincheck");
-    //   this.listen();
-    // },
+    eight_logincheck: function () {
+      this.socket.emit("logincheck");
+    },
     // listen: function () {
     //   this.socket.on("notloggedin", () => {
     //     this.$router.push({ path: "/login", replace: true });
@@ -227,7 +279,11 @@ export default {
     // },
   },
   mounted() {
-    this.getJSMatches();
+    this.msg_listen();
+    this.eight_logincheck();
+  },
+  unmounted() {
+    this.socket.removeEventListener();
   },
 };
 </script>
@@ -292,8 +348,22 @@ export default {
     overflow-y: scroll;
     overflow-x: hidden;
     height: 85%;
-    padding-left: 10%;
-    padding-right: 10%;
+    padding-left: 2%;
+    padding-right: 2%;
+  }
+
+  .msg-container {
+    overflow-y: scroll;
+    width: 100%;
+    height: 85%;
+    /* border: 2px solid red; */
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    /* align-items: flex-end; */
   }
 
   .explore-postings-container {
@@ -473,7 +543,6 @@ export default {
     border: none;
     padding: 0 1rem;
     flex-grow: 1;
-
     margin: 0.5rem;
     background: antiquewhite;
   }
@@ -503,11 +572,32 @@ export default {
     width: 40px;
   }
   #messages {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
+    max-height: 100%;
+    overflow-y: scroll;
+    /* border: 2px solid salmon; */
+    display: flex;
+    flex-direction: column;
   }
+
+  .user-msg {
+    align-self: flex-end;
+  }
+
+  .other-msg {
+    align-self: flex-start;
+  }
+
   #messages > li {
+    width: fit-content;
+    max-width: 60%;
+    overflow-wrap: break-word;
+    list-style-type: none;
+    padding: 0 1rem;
+    flex-grow: 1;
+    margin: 0.25rem;
+    background: antiquewhite;
+    font-family: "Montserrat", sans-serif;
+    border-radius: 15px;
     padding: 0.5rem 1rem;
   }
 }

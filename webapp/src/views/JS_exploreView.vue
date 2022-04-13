@@ -4,7 +4,10 @@
       <div class="content-container">
         <div class="row row-one">
           <div class="logo-container col-auto">
-            <img class="logo" src="@/assets/google-logo.png" />
+            <img
+              class="logo"
+              :src="`data:image/png;base64,${this.company_logo}`"
+            />
           </div>
           <div class="col-auto">
             <div class="role-title">{{ this.job_title }}</div>
@@ -67,6 +70,8 @@ export default {
     return {
       refresh: null,
       jobs: false,
+      login_status: false,
+      company_logo: null,
       socket: Websocket,
       job_id: 0,
       job_title: "",
@@ -89,14 +94,28 @@ export default {
       console.log("id sent:" + this.job_id);
       this.getJob(this.job_id);
     },
+    logincheck: function () {
+      this.socket.emit("logincheck");
+    },
 
     getJob: function (curr_id) {
-      this.socket.emit("jobrequest", curr_id);
-      this.listen();
+      if (this.login_status) {
+        this.socket.emit("jobrequest", curr_id);
+      }
     },
-    listen: function () {
+    arrayBufferToBase64: function (buffer) {
+      var binary = "";
+      var bytes = new Uint8Array(buffer);
+      var len = bytes.byteLength;
+      for (var i = 0; i < len; i++) {
+        binary += String.fromCharCode(bytes[i]);
+      }
+      return window.btoa(binary);
+    },
+    js_explore_listen: function () {
       this.socket.on("givenjob", (job) => {
         console.log("job given");
+        this.company_logo = this.arrayBufferToBase64(job.company_logo);
         this.jobs = true;
         this.job_id = job.job_id;
         this.job_title = job.job_title;
@@ -109,9 +128,16 @@ export default {
         this.req_expeirence = job.req_expeirence;
       });
 
-      // this.socket.on("notloggedin", () => {
-      //   this.$router.push({ path: "/login", replace: true });
-      // });
+      this.socket.on("notloggedin", () => {
+        this.$router.push({ path: "/login", replace: true });
+      });
+
+      this.socket.on("loggedin", () => {
+        console.log("login confirmation recvd");
+        this.login_status = true;
+        console.log(this.login_status);
+        this.getJob();
+      });
 
       this.socket.on("nojobmatches", () => {
         this.jobs = false;
@@ -119,15 +145,17 @@ export default {
     },
   },
   mounted() {
-    this.getJob();
+    this.js_explore_listen();
+    this.logincheck();
     this.refresh = window.setInterval(() => {
       if (this.jobs === false) {
         this.getJob();
       }
     }, 10000);
   },
-  unmounted: function () {
+  unmounted() {
     clearInterval(this.refresh);
+    this.socket.removeEventListener();
   },
 };
 </script>

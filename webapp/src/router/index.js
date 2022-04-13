@@ -9,6 +9,8 @@ import addjob from "../views/HM_AddJobView.vue";
 import postedjobs from "../views/HM_postedJobs.vue";
 import HM_Explorepage from "../views/HM_exploreView.vue";
 import JS_Matchespage from "../views/JS_matchesView.vue";
+import JS_profile from "../views/JS_ProfileView.vue";
+import JS_editprofile from "../views/JS_EditprofileView.vue";
 
 const routes = [
   { path: "", name: "Landingpage", component: Landingpage },
@@ -44,6 +46,16 @@ const routes = [
     path: "/jobseeker-matches",
     name: "jobseeker-matches",
     component: JS_Matchespage,
+  },
+  {
+    path: "/jobseeker-profile",
+    name: "jobseeker-profile",
+    component: JS_profile,
+  },
+  {
+    path: "/jobseeker-edit-profile",
+    name: "jobseeker-edit-profile",
+    component: JS_editprofile,
   },
 ];
 

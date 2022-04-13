@@ -274,6 +274,7 @@ export default {
   data() {
     return {
       socket: Websocket,
+      company_logo: null,
       job_type: "",
       job_title: "",
       location: "",
@@ -298,18 +299,24 @@ export default {
       });
       this.$router.push({ path: "/hiringmanager-postedjobs", replace: true });
     },
-    // logincheck: function () {
-    //   this.socket.emit("logincheck");
-    //   this.listen();
-    // },
+    four_logincheck: function () {
+      this.socket.emit("logincheck");
+    },
 
-    // listen: function () {
-    //   this.socket.on("notloggedin", () => {
-    //     this.$router.push({ path: "/login", replace: true });
-    //   });
+    addjob_listen: function () {
+      this.socket.on("notloggedin", () => {
+        this.$router.push({ path: "/login", replace: true });
+      });
 
-    //   this.socket.on("loggedin", () => {});
-    // },
+      this.socket.on("loggedin", () => {});
+    },
+  },
+  mounted() {
+    this.addjob_listen();
+    this.four_logincheck();
+  },
+  unmounted() {
+    this.socket.removeEventListener();
   },
 };
 </script>

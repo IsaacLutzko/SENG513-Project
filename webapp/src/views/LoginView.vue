@@ -14,6 +14,7 @@
         <span v-if="v$.email.$error">
           {{ v$.email.$errors[0].$message }}
         </span>
+        <span v-if="valid === false"> Invalid Credentials </span>
       </div>
       <div class="input-box">
         <span class="details">Password</span>
@@ -26,6 +27,7 @@
         <span v-if="v$.password.$error">
           {{ v$.password.$errors[0].$message }}
         </span>
+        <span v-if="valid === false"> Invalid Credentials </span>
       </div>
 
       <div class="button input-box">
@@ -54,6 +56,7 @@ export default {
   data() {
     return {
       socket: Websocket,
+      valid: null,
     };
   },
 
@@ -81,7 +84,6 @@ export default {
     submitForm() {
       this.v$.$validate();
       if (!this.v$.$error) {
-        alert("Form is submitted");
         this.loginRequest();
       } else {
         alert("Invalid inputs");
@@ -94,21 +96,28 @@ export default {
         password: this.state.password,
       });
       // Listen for a response from the server
-      this.listen();
     },
-    listen: function () {
+    login_listen: function () {
       this.socket.on("HiringManager-loggedin", () => {
         this.$router.push({ path: "/hiringmanager-explore", replace: true });
       });
 
       this.socket.on("Jobseeker-loggedin", () => {
+        this.valid = true;
         this.$router.push({ path: "/jobseeker-explore", replace: true });
       });
 
       this.socket.on("invalidCredentials", () => {
+        this.valid = false;
         console.log("Invalid Credentials! Please try again");
       });
     },
+  },
+  mounted() {
+    this.login_listen();
+  },
+  unmounted() {
+    this.socket.removeEventListener();
   },
 };
 </script>

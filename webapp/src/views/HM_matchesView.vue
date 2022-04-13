@@ -94,7 +94,20 @@
 
         <!-- Messages go here -->
         <div v-if="dropItDown" class="msg-container">
-          <ul id="messages"></ul>
+          <ul id="messages">
+            <li
+              v-for="message in this.active_job.messages"
+              :key="message"
+              id="text-message"
+              :class="
+                message.sender == this.active_job.hiring_manager_email
+                  ? 'user-msg'
+                  : 'other-msg'
+              "
+            >
+              {{ message.content }}
+            </li>
+          </ul>
         </div>
 
         <div
@@ -190,8 +203,13 @@
       </div>
 
       <div v-if="dropItDown" class="row message-box">
-        <form id="message-form-box" action="">
-          <input id="input-message" autocomplete="off" />
+        <form @submit.prevent="HMsendMessage" id="message-form-box">
+          <input
+            type="text"
+            id="input-message"
+            v-model="curr_message"
+            autocomplete="off"
+          />
           <button id="send-button">
             <p id="send-text">SEND</p>
             <img src="@/assets/send_icon.png" alt="" id="send-img" />
@@ -213,6 +231,7 @@ export default {
       jobs: new Map(),
       matches: [
         {
+          match_id: null,
           job_id: null,
           job_seeker_email: "",
           hiring_manager_email: "",
@@ -220,7 +239,6 @@ export default {
           seeker_name: "",
           messages: [
             {
-              message_id: "",
               content: "",
               sender: "",
               reciever: "",
@@ -232,6 +250,16 @@ export default {
     };
   },
   methods: {
+    HMsendMessage: function () {
+      this.socket.emit("hm_msg", {
+        match_id: this.active_job.match_id,
+        sender: this.active_job.hiring_manager_email,
+        reciever: this.active_job.job_seeker_email,
+        content: this.curr_message,
+      });
+      console.log("msg sent to server");
+    },
+
     activePosting: function (element, jobVar) {
       this.active_item = element;
       this.activeJob = jobVar;
@@ -242,6 +270,10 @@ export default {
     activeJSeek: function (element, jsVar) {
       this.active_job = element;
       this.activeJS = jsVar;
+      this.getChatlog();
+    },
+    getChatlog() {
+      this.socket.emit("getChatlog", this.active_job.match_id);
     },
     // Accepts the array and key
     groupBy: function (array, key) {
@@ -257,12 +289,19 @@ export default {
     },
     getMatches: function () {
       this.socket.emit("getMatches_HM");
-      this.listen();
     },
 
     //
 
-    listen: function () {
+    hm_matches_listen: function () {
+      this.socket.on("notloggedin", () => {
+        this.$router.push({ path: "/login", replace: true });
+      });
+
+      this.socket.on("loggedin", () => {
+        this.getMatches();
+      });
+
       this.socket.on("HMMatches", (matches_recvd) => {
         this.matches = matches_recvd;
 
@@ -288,12 +327,19 @@ export default {
       this.socket.on("HMnoMatches", () => {
         console.log("no matches");
       });
+
+      this.socket.on("msg", (match) => {
+        this.active_job.messages.push(match.message);
+      });
+
+      this.socket.on("chatlog", (log) => {
+        this.active_job.messages = log;
+      });
     },
 
-    // logincheck: function () {
-    //   this.socket.emit("logincheck");
-    //   this.listen();
-    // },
+    two_logincheck: function () {
+      this.socket.emit("logincheck");
+    },
     // listen: function () {
     //   this.socket.on("notloggedin", () => {
     //     this.$router.push({ path: "/login", replace: true });
@@ -301,7 +347,11 @@ export default {
     // },
   },
   mounted() {
-    this.getMatches();
+    this.hm_matches_listen();
+    this.two_logincheck();
+  },
+  unmounted() {
+    this.socket.removeEventListener();
   },
   // this.logincheck();
 };
@@ -365,8 +415,8 @@ export default {
     overflow-y: scroll;
     overflow-x: hidden;
     height: 85%;
-    padding-left: 10%;
-    padding-right: 10%;
+    padding-left: 2%;
+    padding-right: 2%;
   }
 
   .explore-postings-container {
@@ -575,12 +625,49 @@ export default {
     height: 40px;
     width: 40px;
   }
-  #messages {
+
+  .msg-container {
+    overflow-y: scroll;
+    width: 100%;
+    height: 85%;
+    /* border: 2px solid red; */
     list-style-type: none;
     margin: 0;
     padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    /* align-items: flex-end; */
   }
+
+  #messages {
+    max-height: 100%;
+    overflow-y: scroll;
+    /* border: 2px solid salmon; */
+    display: flex;
+    flex-direction: column;
+  }
+
+  .user-msg {
+    align-self: flex-end;
+  }
+
+  .other-msg {
+    background: #f3f3f3;
+    align-self: flex-start;
+    color: black;
+  }
+
   #messages > li {
+    width: fit-content;
+    max-width: 60%;
+    list-style-type: none;
+    padding: 0 1rem;
+    flex-grow: 1;
+    margin: 0.25rem;
+    background: antiquewhite;
+    font-family: "Montserrat", sans-serif;
+    border-radius: 15px;
     padding: 0.5rem 1rem;
   }
 }

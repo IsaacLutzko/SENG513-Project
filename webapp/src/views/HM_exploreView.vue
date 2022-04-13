@@ -56,7 +56,7 @@
     </div>
 
     <div class="container col-lg-9">
-      <div v-if="available" class="content-container">
+      <div class="content-container">
         <div class="sticky-top explore-postings-container">
           <div class="row" id="mobile-postings-row">
             <!-- hide after desktop breakpoint -->
@@ -76,123 +76,135 @@
         </div>
 
         <div v-if="dropItDown" class="card-container">
+          <div v-if="available">
+            <div>
+              <div class="row d-flex justify-content-center" id="card-img">
+                <div class="col-sm-auto">
+                  <div class="profile-image d-flex justify-content-center">
+                    <img
+                      class="logo"
+                      :src="`data:image/png;base64,${this.pic}`"
+                    />
+
+                    <!-- How to make image dynamic? -->
+                  </div>
+                  <div class="profile-name">
+                    {{ this.firstname }} {{ this.lastname }}
+                  </div>
+                </div>
+              </div>
+
+              <div class="social-cont">
+                <div
+                  v-for="social in this.socials"
+                  :key="social"
+                  class="row socials"
+                >
+                  <div
+                    v-if="social.platform == 'Linkedin'"
+                    class="social-icon col"
+                  >
+                    <a target="_blank" :href="social.link" aria-label="Next"
+                      ><img
+                        class="social-logo-link"
+                        src="@/assets/LinkedInLogo.png"
+                    /></a>
+                  </div>
+                  <div
+                    v-else-if="social.platform == 'Github'"
+                    class="social-icon col"
+                  >
+                    <a target="_blank" :href="social.link" aria-label="Next"
+                      ><img
+                        class="social-logo-link"
+                        src="@/assets/GitHubLogo.png"
+                    /></a>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row d-flex justify-content-center" id="about-me">
+                <div class="col-sm-auto">
+                  <div class="about-me-header">
+                    <h5 class="header-about">About Me</h5>
+                  </div>
+                  <div class="about-me-desc">{{ this.aboutyou }}</div>
+                </div>
+              </div>
+
+              <div
+                class="row d-flex justify-content-center"
+                id="work-experiences"
+              >
+                <div class="experience-header">
+                  <h5 class="experience-head">Experience</h5>
+                </div>
+                <div
+                  v-for="workExp in this.work_experience"
+                  :key="workExp"
+                  class="col-sm-auto"
+                >
+                  <!-- first work experience example -->
+                  <div class="work-example1">
+                    <div class="work-header1">
+                      <h5 class="work-head1">{{ workExp.job_title }}</h5>
+                    </div>
+                    <div class="work-info">
+                      {{ workExp.company }} - {{ workExp.years }} years
+                    </div>
+                    <div class="work-exp-desc">{{ workExp.description }}</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row d-flex justify-content-center" id="skills">
+                <div class="skills-header">
+                  <h5 class="skills-head">Skills</h5>
+                </div>
+                <div
+                  v-for="skill in this.skills"
+                  :key="skill"
+                  class="col-sm-auto"
+                >
+                  <div class="skill-list">
+                    <label>{{ skill }}</label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row d-flex justify-content-center" id="education-top">
+                <div class="col-sm-auto">
+                  <div class="edu-header">
+                    <h5 class="edu-head">Education</h5>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row d-flex justify-content-start" id="education-info">
+                <div
+                  v-for="education in this.educations"
+                  :key="education"
+                  class="col-12"
+                >
+                  <div class="edu-ex1">
+                    <div class="edu-head1">
+                      <h5 class="edu-head-deg">
+                        {{ education.degree_type }} at {{ education.institute }}
+                      </h5>
+                    </div>
+                    <div class="edu-info">
+                      {{ education.start_date }} --- {{ education.end_date }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
           <!-- <div v-for="user in activeUsers" :key="user"> -->
-          <div>
-            <div class="row d-flex justify-content-center" id="card-img">
-              <div class="col-sm-auto">
-                <div class="profile-image d-flex justify-content-center">
-                  <img class="logo" :src="this.pic.src" alt="Red dot" />
-                  <!-- How to make image dynamic? -->
-                </div>
-                <div class="profile-name">
-                  {{ this.firstname }} {{ this.lastname }}
-                </div>
-              </div>
-            </div>
 
-            <div class="social-cont">
-              <div
-                v-for="social in this.socials"
-                :key="social"
-                class="row socials"
-              >
-                <div
-                  v-if="social.platform == 'LinkedIn'"
-                  class="social-icon col"
-                >
-                  <a target="_blank" :href="social.link" aria-label="Next"
-                    ><img
-                      class="social-logo-link"
-                      src="@/assets/LinkedInLogo.png"
-                  /></a>
-                </div>
-                <div
-                  v-else-if="social.platform == 'Github'"
-                  class="social-icon col"
-                >
-                  <a target="_blank" :href="social.link" aria-label="Next"
-                    ><img
-                      class="social-logo-link"
-                      src="@/assets/GitHubLogo.png"
-                  /></a>
-                </div>
-              </div>
-            </div>
-
-            <div class="row d-flex justify-content-center" id="about-me">
-              <div class="col-sm-auto">
-                <div class="about-me-header">
-                  <h5 class="header-about">About Me</h5>
-                </div>
-                <div class="about-me-desc">{{ this.aboutyou }}</div>
-              </div>
-            </div>
-
-            <div
-              class="row d-flex justify-content-center"
-              id="work-experiences"
-            >
-              <div class="experience-header">
-                <h5 class="experience-head">Experience</h5>
-              </div>
-              <div
-                v-for="workExp in this.work_experience"
-                :key="workExp"
-                class="col-sm-auto"
-              >
-                <!-- first work experience example -->
-                <div class="work-example1">
-                  <div class="work-header1">
-                    <h5 class="work-head1">{{ workExp.job_title }}</h5>
-                  </div>
-                  <div class="work-info">
-                    {{ workExp.company }} - {{ workExp.years }} years
-                  </div>
-                  <div class="work-exp-desc">{{ workExp.description }}</div>
-                </div>
-              </div>
-            </div>
-
-            <div class="row d-flex justify-content-center" id="skills">
-              <div class="skills-header">
-                <h5 class="skills-head">Skills</h5>
-              </div>
-              <div
-                v-for="skill in this.skills"
-                :key="skill"
-                class="col-sm-auto"
-              >
-                <div class="skill-list">
-                  <label>{{ skill }}</label>
-                </div>
-              </div>
-            </div>
-
-            <div class="row d-flex justify-content-center" id="education-top">
-              <div class="col-sm-auto">
-                <div class="edu-header">
-                  <h5 class="edu-head">Education</h5>
-                </div>
-              </div>
-            </div>
-
-            <div class="row d-flex justify-content-start" id="education-info">
-              <div
-                v-for="education in this.educations"
-                :key="education"
-                class="col-12"
-              >
-                <div class="edu-ex1">
-                  <div class="edu-head1">
-                    <h5 class="edu-head-deg">
-                      {{ education.degree_type }} at {{ education.institute }}
-                    </h5>
-                  </div>
-                  <div class="edu-info">
-                    {{ education.start_date }} --- {{ education.end_date }}
-                  </div>
-                </div>
-              </div>
+          <div v-else class="no-seekers">
+            <div class="inner">
+              <h1>No New Candidates for this job</h1>
             </div>
           </div>
         </div>
@@ -272,12 +284,9 @@
           </div>
         </div>
       </div>
-      <div v-else class="content-container">
-        <h1>No New Candidates for this job</h1>
-      </div>
 
       <div class="row">
-        <div class="button-bar">
+        <div :class="available ? 'button-bar' : 'disapper'">
           <div class="button-container">
             <button @click="choice('unlike')" class="buttons-bar">
               <img class="check-logo" src="@/assets/x_icon.png" />
@@ -301,6 +310,7 @@ export default {
   data() {
     return {
       timer: null,
+      url: null,
       available: false,
       available_postings: false,
       socket: Websocket,
@@ -363,6 +373,15 @@ export default {
       //     }
       //   }
     },
+    arrayBufferToBase64: function (buffer) {
+      var binary = "";
+      var bytes = new Uint8Array(buffer);
+      var len = bytes.byteLength;
+      for (var i = 0; i < len; i++) {
+        binary += String.fromCharCode(bytes[i]);
+      }
+      return window.btoa(binary);
+    },
     choice: function (choice) {
       this.socket.emit("jobseekerchoice", {
         type: this.activeJob,
@@ -376,19 +395,29 @@ export default {
     getmyPostings: function () {
       console.log("ask for postings");
       this.socket.emit("getPostings");
-      this.listen();
     },
     getUser: function (type) {
       this.socket.emit("jobseekerrequest", type);
-      this.listen();
     },
-    listen: function () {
+
+    exp_listen: function () {
+      this.socket.on("notloggedin", () => {
+        this.$router.push({ path: "/login", replace: true });
+      });
+
+      this.socket.on("loggedin", () => {
+        this.getmyPostings();
+      });
+
       this.socket.on("givenjobseeker", (jobseeker) => {
         this.available = true;
 
-        this.pic = new Image();
-        this.pic.src = `data:image/png;base64,${jobseeker.pic}`;
-        // this.pic = jobseeker.pic;
+        this.pic = this.arrayBufferToBase64(jobseeker.pic);
+        console.log();
+        // const reader = new FileReader();
+        // this.url = URL.createObjectURL(this.pic);
+        // reader.readAsDataURL(this.pic);
+        this.pic = this.pic = this.arrayBufferToBase64(jobseeker.pic);
         this.email = jobseeker.email;
         this.firstname = jobseeker.firstname;
         this.lastname = jobseeker.lastname;
@@ -415,18 +444,13 @@ export default {
         this.available_postings = false;
       });
     },
-    // logincheck: function () {
-    //   this.socket.emit("logincheck");
-    //   this.listen();
-    // },
-    // listen: function () {
-    //   this.socket.on("notloggedin", () => {
-    //     this.$router.push({ path: "/login", replace: true });
-    //   });
-    // },
+    three_logincheck: function () {
+      this.socket.emit("logincheck");
+    },
   },
   mounted() {
-    this.getmyPostings();
+    this.exp_listen();
+    this.three_logincheck();
     // this.timer = window.setInterval(() => {
     //   if (this.available === false) {
     //     this.getUser(this.activeJob);
@@ -434,7 +458,8 @@ export default {
     // }, 10000);
   },
   unmounted() {
-    clearInterval(this.timer);
+    // clearInterval(this.timer);
+    this.socket.removeEventListener();
   },
 };
 </script>
@@ -448,6 +473,18 @@ export default {
   }
   .desktop-postings-cont {
     display: none;
+  }
+
+  .disapper {
+    display: none;
+  }
+
+  .no-seekers {
+    color: lightgray;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   #postings-arrow {
@@ -519,6 +556,11 @@ export default {
   }
   .back-arrow-container .logo {
     width: 33px;
+    height: auto;
+  }
+
+  .logo {
+    width: 200px;
     height: auto;
   }
 

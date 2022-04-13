@@ -96,9 +96,16 @@ export default {
     },
     getPostings: function () {
       this.socket.emit("getpostedjobs");
-      this.listen();
     },
-    listen: function () {
+    posted_listen: function () {
+      this.socket.on("notloggedin", () => {
+        this.$router.push({ path: "/login", replace: true });
+      });
+
+      this.socket.on("loggedin", () => {
+        this.getPostings();
+      });
+
       this.socket.on("givepostedjobs", (jobs) => {
         this.jobs_avaliable = true;
         this.postedJobs = jobs;
@@ -108,18 +115,22 @@ export default {
         this.jobs_avaliable = false;
       });
     },
-    // logincheck: function () {
-    //   this.socket.emit("logincheck");
-    //   this.listen();
-    // },
+    one_logincheck: function () {
+      this.socket.emit("logincheck");
+    },
     // listen: function () {
     //   this.socket.on("notloggedin", () => {
     //     this.$router.push({ path: "/login", replace: true });
     //   });
     // },
   },
+
   mounted() {
-    this.getPostings();
+    this.posted_listen();
+    this.one_logincheck();
+  },
+  unmounted() {
+    this.socket.removeEventListener();
   },
   // this.logincheck();
 };

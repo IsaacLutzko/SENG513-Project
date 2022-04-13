@@ -7,7 +7,7 @@
           <img
             v-else
             class="profile-pic"
-            src="@/assets/user_profile_icon.png"
+            :src="`data:image/png;base64,${this.image}`"
           />
 
           <input type="file" @change="uploadImage" multiple />
@@ -16,43 +16,34 @@
           <div class="input-box">
             <span class="details">First Name</span>
             <input
-              v-model="state.firstname"
+              v-model="firstname"
               class="name-field text-area"
               type="text"
               placeholder="Enter your first name"
               required
             />
-            <span v-if="v$.firstname.$error">
-              {{ v$.firstname.$errors[0].$message }}
-            </span>
           </div>
           <div class="input-box">
             <span class="details">Last Name</span>
             <input
-              v-model="state.lastname"
+              v-model="lastname"
               class="name-field text-area"
               type="text"
               placeholder="Enter your last name"
               required
             />
-            <span v-if="v$.lastname.$error">
-              {{ v$.lastname.$errors[0].$message }}
-            </span>
           </div>
         </div>
         <div class="col-lg-5 col-class about-col">
           <div class="input-box">
             <span class="details">About you</span>
             <input
-              v-model="state.aboutyou"
+              v-model="aboutyou"
               class="about-you"
               type="text"
               placeholder="Give a brief description about you"
               required
             />
-            <span v-if="v$.aboutyou.$error">
-              {{ v$.aboutyou.$errors[0].$message }}
-            </span>
           </div>
         </div>
       </div>
@@ -66,7 +57,7 @@
           <div class="col-lg-4 type-col">
             <div class="dropdown-heading">Choice 1</div>
             <select
-              v-model="state.job_types[0]"
+              v-model="job_types[0]"
               class="form-select dropdown-box"
               aria-label="Default select example"
             >
@@ -96,14 +87,11 @@
               </option>
               <option value="Mobile Developer">Mobile Developer</option>
             </select>
-            <span v-if="v$.job_types[0].$error">
-              {{ v$.job_types[0].$errors[0].$message }}
-            </span>
           </div>
           <div class="col-lg-4 type-col">
             <div class="dropdown-heading">Choice 2</div>
             <select
-              v-model="state.job_types[1]"
+              v-model="job_types[1]"
               class="form-select dropdown-box"
               aria-label="Default select example"
             >
@@ -137,7 +125,7 @@
           <div class="col-lg-4 type-col">
             <div class="dropdown-heading">Choice 3</div>
             <select
-              v-model="state.job_types[2]"
+              v-model="job_types[2]"
               class="form-select dropdown-box"
               aria-label="Default select example"
             >
@@ -275,7 +263,7 @@
                         <input
                           type="checkbox"
                           value="TCP/IP"
-                          v-model="state.skills"
+                          v-model="skills"
                         />
                         <label>TCP/IP</label>
                       </div>
@@ -559,12 +547,6 @@
 
 <script>
 import Websocket from "../../services/webSocket";
-import useValidate from "@vuelidate/core";
-import { reactive, computed } from "vue";
-import {
-  required,
-  // helpers,
-} from "@vuelidate/validators";
 
 export default {
   data() {
@@ -604,57 +586,6 @@ export default {
     };
   },
 
-  setup() {
-    const state = reactive({
-      image: null,
-      firstname: "",
-      lastname: "",
-      aboutyou: "",
-      job_types: [],
-      skills: [],
-      work_experience: [
-        {
-          job_seeker_email: "",
-          company: "",
-          job_title: "",
-          job_type: "",
-          years: "",
-          description: "",
-        },
-      ],
-      socials: [
-        {
-          platform: "",
-          link: "",
-        },
-      ],
-      education: [
-        {
-          institute: "",
-          start_date: "",
-          end_date: "",
-          degree_type: "",
-        },
-      ],
-    });
-
-    const rules = computed(() => {
-      return {
-        firstname: { required },
-        lastname: { required },
-        aboutyou: { required },
-        job_types: [{ required }],
-      };
-    });
-
-    const v$ = useValidate(rules, state);
-
-    return {
-      state,
-      v$,
-    };
-  },
-
   methods: {
     addJob: function () {
       this.work_experience.push({
@@ -681,28 +612,34 @@ export default {
       });
     },
     submitForm() {
-      this.v$.$validate();
-      if (!this.v$.$error) {
-        this.sendUserData();
-      } else {
-        alert("Invalid inputs");
+      this.sendUserData();
+    },
+    getmydata: function () {
+      this.socket.emit("myinfo");
+    },
+    arrayBufferToBase64: function (buffer) {
+      var binary = "";
+      var bytes = new Uint8Array(buffer);
+      var len = bytes.byteLength;
+      for (var i = 0; i < len; i++) {
+        binary += String.fromCharCode(bytes[i]);
       }
+      return window.btoa(binary);
     },
     sendUserData: function () {
-      this.socket.emit("userData", {
-        image: this.image,
-        firstname: this.state.firstname,
-        lastname: this.state.lastname,
-        aboutyou: this.state.aboutyou,
-
-        job_types: this.state.job_types,
+      this.socket.emit("updateData", {
+        image: this.pic,
+        firstname: this.firstname,
+        lastname: this.lastname,
+        aboutyou: this.aboutyou,
+        job_types: this.job_types,
         skills: this.skills,
         work_experience: this.work_experience,
         socials: this.socials,
         education: this.education,
       });
-      console.log("user data sent to server");
-      this.$router.push({ path: "/jobseeker-explore", replace: true });
+      console.log("updated user data sent to server");
+      this.$router.push({ path: "/jobseeker-profile", replace: true });
     },
 
     uploadImage: function (event) {
@@ -712,20 +649,45 @@ export default {
       this.url = URL.createObjectURL(this.image);
       reader.readAsDataURL(this.image);
     },
-    five_logincheck: function () {
-      this.socket.emit("logincheck");
-    },
-    create_listen: function () {
+    edit_listen: function () {
       this.socket.on("notloggedin", () => {
         this.$router.push({ path: "/login", replace: true });
       });
 
-      this.socket.on("loggedin", () => {});
+      this.socket.on("loggedin", () => {
+        this.getmydata();
+      });
+
+      this.socket.on("info", (user) => {
+        this.image = user.pic;
+        // const reader = new FileReader();
+        // this.url = URL.createObjectURL(this.pic);
+        // reader.readAsDataURL(this.pic);
+        this.image = this.arrayBufferToBase64(user.pic);
+        this.email = user.email;
+        this.firstname = user.firstname;
+        this.lastname = user.lastname;
+        this.aboutyou = user.aboutyou;
+        this.job_types = user.job_types;
+        this.skills = user.skills;
+        this.work_experience = user.work_experience;
+        this.socials = user.socials;
+        this.education = user.education;
+      });
     },
+    six_logincheck: function () {
+      this.socket.emit("logincheck");
+    },
+    listen: function () {},
   },
   mounted() {
-    this.create_listen();
-    this.five_logincheck();
+    this.edit_listen();
+    this.six_logincheck();
+    // this.timer = window.setInterval(() => {
+    //   if (this.available === false) {
+    //     this.getUser(this.activeJob);
+    //   }
+    // }, 10000);
   },
   unmounted() {
     this.socket.removeEventListener();

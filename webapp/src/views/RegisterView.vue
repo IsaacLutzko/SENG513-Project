@@ -171,7 +171,6 @@ export default {
       });
       console.log(this.state.user_type);
       // Listen for a response from the server
-      this.listen();
     },
     uploadImage: function (event) {
       console.log(event.target.files[0]);
@@ -182,7 +181,7 @@ export default {
       // this.socket.emit("base64 file", image);
     },
     // All the listening functions
-    listen: function () {
+    register_listen: function () {
       this.socket.on("loginaccepted", () => {
         console.log("credential accepted");
 
@@ -197,6 +196,12 @@ export default {
         console.log("credential denied");
       });
     },
+  },
+  mounted() {
+    this.register_listen();
+  },
+  unmounted() {
+    this.socket.removeEventListener();
   },
 };
 </script>

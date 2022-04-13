@@ -224,7 +224,7 @@
                 this.$route.path != '/hiringmanager-postedjobs' &&
                 this.$route.path != '/hiringmanager-addjob'
               "
-              to="#"
+              to="/jobseeker-profile"
               class="nav-item"
               >Profile</router-link
             >
