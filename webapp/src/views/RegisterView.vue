@@ -207,109 +207,145 @@ export default {
 </script>
 
 <style scoped>
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+
+@media only screen and (min-width: 50px) {
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  .page-container {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 90vh;
+    display: flex;
+    /* border: solid 5px red; */
+    
+    background-repeat: no-repeat, no-repeat;
+    background-position: top 20% right 10%, bottom;
+    background-size: 45%, 100%;
+    align-items: center;
+    justify-items: left;
+  }
+
+  .content {
+    border: solid 2.5px black;
+    border-radius: 15px;
+    position: relative;
+    /* left: 10%; */
+    /* top: -2%; */
+    margin:auto;
+    width: 95%;
+    width: fit-content;
+    height: 92%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .heading,
+  .sub-heading {
+    padding-bottom: 2%;
+  }
+
+  .profile-pic {
+    width: 200px;
+    height: auto;
+  }
+
+  .content {
+    padding-left: 8%;
+    padding-right: 8%;
+    /* padding-top: 10px; */
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .form-box {
+    width: 100%;
+  }
+
+  .input-box {
+    width: 80%;
+    padding-bottom: 4%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .input-box .text-area {
+    padding: 5px;
+    border-radius: 5px;
+    background-color: #f7f2f8;
+    width: 100%;
+    height: 6vh;
+  }
+
+  .heading {
+    font-family: "Manrope", sans-serif;
+    font-size: 4.5vh;
+    font-weight: bold;
+  }
+
+  .sub-heading {
+    font-family: "Montserrat", sans-serif;
+    font-size: 2.5vh;
+    color: #706464;
+  }
+
+  .details {
+    align-self: flex-start;
+    font-family: "Montserrat", sans-serif;
+    font-weight: bold;
+  }
+
+  .input-button {
+    font-family: "Montserrat", sans-serif;
+    font-size: 3vh;
+    color: white;
+    font-weight: bold;
+    padding: 10px;
+    background-image: linear-gradient(90deg, #fc8801, #dea26a);
+    border: none;
+  }
+
+  .dropdown-btn {
+    border: 1px solid #837373;
+  }
+
 }
 
-.page-container {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 90vh;
-  display: flex;
-  /* border: solid 5px red; */
-  background-image: url(@/assets/login_image.png), url(@/assets/page_curve.svg);
-  background-repeat: no-repeat, no-repeat;
-  background-position: top 20% right 10%, bottom;
-  background-size: 45%, 100%;
-  align-items: center;
-  justify-items: left;
-}
-
-.content {
-  border: solid 2.5px black;
-  border-radius: 15px;
-  position: relative;
-  left: 10%;
-  top: -3%;
-  width: fit-content;
-  height: fit-content;
-  display: flex;
-  flex-direction: column;
-}
-
-.heading,
-.sub-heading {
-  padding-bottom: 5%;
-}
-
-.profile-pic {
-  width: 200px;
-  height: auto;
-}
-
-.content {
-  padding-left: 30px;
-  padding-right: 30px;
-  padding-top: 10px;
-  background-color: white;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.form-box {
-  width: 100%;
-}
-
-.input-box {
-  width: 80%;
-  padding-bottom: 10%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.input-box .text-area {
-  padding: 5px;
-  border-radius: 5px;
-  background-color: #f7f2f8;
-  width: 100%;
-  height: 40px;
-}
-
-.heading {
-  font-family: "Manrope", sans-serif;
-  font-size: 40px;
-  font-weight: bold;
-}
-
-.sub-heading {
-  font-family: "Montserrat", sans-serif;
-  font-size: 20px;
-  color: #706464;
-}
-
-.details {
-  align-self: flex-start;
-  font-family: "Montserrat", sans-serif;
-  font-weight: bold;
-}
-
-.input-button {
-  font-family: "Montserrat", sans-serif;
-  font-size: 20px;
-  color: white;
-  font-weight: bold;
-  padding: 10px;
-  background-image: linear-gradient(90deg, #fc8801, #dea26a);
-  border: none;
-}
-
-.dropdown-btn {
-  border: 1px solid #837373;
+@media only screen and (min-width: 450px) { 
+  .page-container {
+    background-image: url(@/assets/login_image.png), url(@/assets/page_curve.svg);
+  }
+ .content {
+    border: solid 2.5px black;
+    border-radius: 15px;
+    position: relative;
+    left: 10%;
+    margin: 0;
+    /* top: -2%; */
+    width: fit-content;
+    height: 92%;
+    display: flex;
+    flex-direction: column;
+  }
+   .content {
+    padding-left: 30px;
+    padding-right: 30px;
+    /* padding-top: 10px; */
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .sub-heading {
+    font-size: 3vh;
+  }
 }
 
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap");

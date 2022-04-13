@@ -123,6 +123,9 @@ export default {
 </script>
 
 <style scoped>
+
+@media only screen and (min-width: 50px) {
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -136,7 +139,7 @@ export default {
   height: 90vh;
   display: flex;
   /* border: solid 5px red; */
-  background-image: url(@/assets/login_image.png), url(@/assets/page_curve.svg);
+  /* background-image: url(@/assets/login_image.png), url(@/assets/page_curve.svg); */
   background-repeat: no-repeat, no-repeat;
   background-position: top 20% right 10%, bottom;
   background-size: 45%, 100%;
@@ -148,7 +151,10 @@ export default {
   border: solid 2.5px black;
   border-radius: 15px;
   position: relative;
-  left: 10%;
+  /* left: 5%; */
+  /* right: 5%; */
+  margin:auto;
+  width: 95%;
   top: -3%;
   width: fit-content;
   height: fit-content;
@@ -162,8 +168,8 @@ export default {
 }
 
 .content {
-  padding-left: 30px;
-  padding-right: 30px;
+  padding-left: 8%;
+  padding-right: 8%;
   padding-top: 10px;
   background-color: white;
   display: flex;
@@ -199,7 +205,7 @@ export default {
 
 .sub-heading {
   font-family: "Montserrat", sans-serif;
-  font-size: 20px;
+  font-size: 16px;
   color: #706464;
 }
 
@@ -222,6 +228,40 @@ export default {
 .dropdown-btn {
   border: 1px solid #837373;
 }
+
+}
+
+@media only screen and (min-width: 450px) {
+  .page-container {
+    background-image: url(@/assets/login_image.png), url(@/assets/page_curve.svg);
+  }
+  .content {
+    border: solid 2.5px black;
+    border-radius: 15px;
+    position: relative;
+    left: 10%;
+    top: -3%;
+    margin: 0;
+  /* width: 95%; */
+    width: fit-content;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+  }
+  .content {
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-top: 10px;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .sub-heading {
+    font-size: 20px;
+  }
+}
+
 
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap");
 
