@@ -76,20 +76,26 @@
 
         <!-- Messages go here -->
         <div v-if="dropItDown" class="msg-container">
-          <ul id="messages">
-            <li
-              v-for="message in this.matches[active_item].messages"
-              :key="message"
-              :class="
-                message.sender == this.matches[active_item].job_seeker_email
-                  ? 'user-msg'
-                  : 'other-msg'
-              "
-              id="text-message"
-            >
-              {{ message.content }}
-            </li>
-          </ul>
+          <div v-if="this.available == true">
+            <ul id="messages">
+              <li
+                v-for="message in this.matches[active_item].messages"
+                :key="message"
+                :class="
+                  message.sender == this.matches[active_item].job_seeker_email
+                    ? 'user-msg'
+                    : 'other-msg'
+                "
+                id="text-message"
+              >
+                {{ message.content }}
+              </li>
+            </ul>
+          </div>
+
+          <div v-else class="no-matches">
+            <h2>You have no matches</h2>
+          </div>
         </div>
 
         <div
@@ -163,18 +169,20 @@
       </div>
 
       <div v-if="dropItDown" class="row message-box">
-        <form @submit.prevent="sendMessage" id="message-form-box">
-          <input
-            type="text"
-            id="input-message"
-            autocomplete="off"
-            v-model="curr_message"
-          />
-          <button id="send-button">
-            <p id="send-text">SEND</p>
-            <img src="@/assets/send_icon.png" alt="" id="send-img" />
-          </button>
-        </form>
+        <div :class="available ? 'show' : 'hide'">
+          <form @submit.prevent="sendMessage" id="message-form-box">
+            <input
+              type="text"
+              id="input-message"
+              autocomplete="off"
+              v-model="curr_message"
+            />
+            <button id="send-button">
+              <p id="send-text">SEND</p>
+              <img src="@/assets/send_icon.png" alt="" id="send-img" />
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   </div>
@@ -189,6 +197,7 @@ export default {
       socket: Websocket,
       dropItDown: true,
       active_item: 0,
+      available: false,
       matches: [
         {
           match_id: null,
@@ -236,11 +245,13 @@ export default {
       });
       //
       this.socket.on("JSMatches", (matches_recvd) => {
+        this.available = true;
         this.matches = matches_recvd;
       });
 
       //
       this.socket.on("JSnoMatches", () => {
+        this.available = false;
         console.log("no matches");
       });
 
@@ -322,6 +333,22 @@ export default {
   }
   .activeJobSeeker {
     color: red;
+  }
+
+  .show {
+    display: flex;
+  }
+
+  .no-matches {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    color: lightgray;
+  }
+
+  .hide {
+    display: none;
   }
 
   .page-container {
@@ -529,6 +556,7 @@ export default {
     justify-items: center;
   }
   #message-form-box {
+    width: 100%;
     padding: 0.25rem;
     position: sticky;
     bottom: 0;

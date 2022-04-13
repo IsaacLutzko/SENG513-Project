@@ -100,6 +100,32 @@ export default {};
   background-image: linear-gradient(90deg, #fc8801, #dea26a);
 }
 
+@media only screen and (max-width: 800px) {
+  .page-container {
+    width: 100%;
+    height: 90vh;
+    background-image: url(@/assets/page_curve.svg);
+    background-repeat: no-repeat;
+    background-position: bottom;
+    background-size: 100%;
+    display: flex;
+    /* flex-direction: column; */
+    align-items: center;
+    /* border: solid 5px blue; */
+    justify-content: center;
+  }
+
+  .content {
+    /* border: solid 5px blue; */
+    /* left: 15%; */
+    /* top: -10%; */
+    width: fit-content;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+  }
+}
+
 @import url("https://fonts.googleapis.com/css2?family=Manrope:wght@700&family=ZCOOL+QingKe+HuangYou&display=swap");
 
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap");

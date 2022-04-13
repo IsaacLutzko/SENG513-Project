@@ -7,17 +7,13 @@ let jobseekers = [
   {
     socket_id: null,
     pic: null,
-    email: "a@a.com",
-    password: "123",
-    firstname: "ahad",
-    lastname: "hamirani",
-    aboutyou: "about me",
-    job_types: [
-      "Full-stack Developer",
-      "Front-end Developer",
-      "Backend Developer",
-    ],
-    skills: ["GIT", "C++", "JAVA"],
+    email: "",
+    password: "",
+    firstname: "",
+    lastname: "",
+    aboutyou: "",
+    job_types: [],
+    skills: [],
     work_experience: [
       {
         job_seeker_email: "",
@@ -58,8 +54,8 @@ let matches = [
     messages: [
       {
         content: "",
-        sender: "job_id",
-        reciever: "job_seeker_email",
+        sender: "",
+        reciever: "",
       },
     ],
   },
