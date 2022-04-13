@@ -22,7 +22,7 @@
               <option value="UX designer">UX designer</option>
               <option value="Software Developer">Software Developer</option>
               <option value="Front-end Developer">Front-end Developer</option>
-              <option value="Back-end Developer">Back-end Developer</option>
+              <option value="Backend Developer">Back-end Developer</option>
               <option value="Full-stack Developer">Full-stack Developer</option>
               <option value="Project Manager">Project Manager</option>
               <option value="Software Engineer">Software Engineer</option>

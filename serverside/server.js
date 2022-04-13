@@ -1,7 +1,6 @@
 const app = require("express")();
 const http = require("http").Server(app);
 const io = require("socket.io")(http, { cors: { origin: "*" } });
-const fs = require("fs");
 
 let jobseekers = [
   {
@@ -294,14 +293,6 @@ io.on("connection", (socket) => {
           // store image buffer
           jobseekers[i].pic = user.image;
           // create image file
-          require("fs").writeFile(
-            "JS-profile-pics/" + Curr_email + "-pic.png",
-            user.image,
-            "base64",
-            function (err) {
-              console.log(err);
-            }
-          );
 
           // Job type
           jobseekers[i].job_types = user.job_types;
@@ -338,15 +329,6 @@ io.on("connection", (socket) => {
 
           // Store company image
           hiringmanagers[i].company_logo = user.image;
-          // Company Image
-          // require("fs").writeFile(
-          //   "HM-company-pics/" + Curr_email + "-pic.png",
-          //   user.image,
-          //   "base64",
-          //   function (err) {
-          //     console.log(err);
-          //   }
-          // );
         }
       }
       console.log("Hiring manager's user info updated");

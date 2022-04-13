@@ -209,20 +209,18 @@
       </div>
 
       <div v-if="dropItDown" class="row message-box">
-        <div :class="available ? 'show' : 'hide'">
-          <form @submit.prevent="HMsendMessage" id="message-form-box">
-            <input
-              type="text"
-              id="input-message"
-              v-model="curr_message"
-              autocomplete="off"
-            />
-            <button id="send-button">
-              <p id="send-text">SEND</p>
-              <img src="@/assets/send_icon.png" alt="" id="send-img" />
-            </button>
-          </form>
-        </div>
+        <form @submit.prevent="HMsendMessage" id="message-form-box">
+          <input
+            type="text"
+            id="input-message"
+            v-model="curr_message"
+            autocomplete="off"
+          />
+          <button id="send-button">
+            <p id="send-text">SEND</p>
+            <img src="@/assets/send_icon.png" alt="" id="send-img" />
+          </button>
+        </form>
       </div>
     </div>
   </div>
@@ -267,6 +265,7 @@ export default {
         content: this.curr_message,
       });
       console.log("msg sent to server");
+      this.curr_message = "";
     },
 
     activePosting: function (element, jobVar) {

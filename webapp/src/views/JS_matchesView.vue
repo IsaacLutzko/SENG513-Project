@@ -227,6 +227,7 @@ export default {
         content: this.curr_message,
       });
       console.log("msg sent to server");
+      this.curr_message = "";
     },
 
     getJSMatches: function () {
